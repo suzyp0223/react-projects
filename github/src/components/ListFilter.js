@@ -29,7 +29,7 @@ function ListFilterItem({ children, onChangeFilter }) {
     <>
       <div className={styles.filterItem}>
         <span role="button" onClick={() => setShowModal(true)}>
-          {children} ▾
+          {children}▾
         </span>
         <div className={styles.modalContainer}>
           <Modal

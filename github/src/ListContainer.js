@@ -1,4 +1,6 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
 import styles from "./ListContainer.module.css";
 
 import Button from "./components/Button";
@@ -11,10 +13,12 @@ import ListFilter from "./components/ListFilter";
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
   const [inputValue, setInputValue] = useState("is:pr is:open");
-  const [list, setList] = useState([]);
+  const [checked, setChecked] = useState(false);
+  const [list, setList] = useState([]); /* data */
 
   // currentPage 변경 state
   const [page, setPage] = useState(1);
+  const maxPage = 10;
   // const MAX_PAGE = getData().totalCount
 
   // 리스트 체크박스
@@ -33,6 +37,18 @@ const ListContainer = () => {
   // useEffect(() => {
   //   console.log({ inputValue });
   // }, [inputValue]);
+
+  async function getData() {
+    const { data } = await axios.get(
+      `https://api.github.com/repos/facebook/react/issues`,
+    );
+    setList(data);
+  }
+
+  // 유저가 볼수있는 화면이 그려지고난 후에 useEffect 훅이 작동(getData()작동)
+  useEffect(() => {
+    getData();
+  }, []); //
 
   return (
     <>
@@ -87,49 +103,49 @@ const ListContainer = () => {
         </>
 
         <OpenClosedFilters />
-        <ListItemLayout className={styles.listFilter}>
-          <ListFilter
-            onChangeFilter={(filteredData) => {
-              // 필터링된 요소에 맞게 데이터를 불러오기
-              // const data = getDate("필터링된 정보");
-              // setList(data);
-            }}
-          />
-        </ListItemLayout>
         <div className={styles.container}>
-          <ListItem
-            // checked={checkedList.filter((item) => item.id === "0")[0]}
-            // onChangeCheckBox={() => {
-            //   const currentChecked = checkedList.filter(
-            //     (item) => item.id === "0",
-            //   )[0];
-
-            //   if (currentChecked) {
-            //     // 리스트에서 빼기
-            //   } else {
-            //     // 리스트에 추가하기
-            //   }
-            //   setCheckedList((checkedList) => [...checkedList, "0"]);
-            // }}
-            badges={[
-              {
-                color: "red",
-                title: "Bug2",
-              },
-            ]}
-          />
-          <div className={styles.paginationContainer}>
-            <Pagination
-              maxPage={10}
-              currentPage={page}
-              onClickPageButton={(number) => setPage(number)}
+          <ListItemLayout className={styles.listFilter}>
+            <ListFilter
+              onChangeFilter={(filteredData) => {
+                // 필터링된 요소에 맞게 데이터를 불러오기
+                // const data = getDate("필터링된 정보");
+                // setList(data);
+              }}
             />
-          </div>
+          </ListItemLayout>
+          {list.map((item) => (
+            <ListItem
+              // checked={checkedList.filter((item) => item.id === "0")[0]}
+              // onChangeCheckBox={() => {
+              //   const currentChecked = checkedList.filter(
+              //     (item) => item.id === "0",
+              //   )[0];
+
+              //   if (currentChecked) {
+              //     // 리스트에서 빼기
+              //   } else {
+              //     // 리스트에 추가하기
+              //   }
+              //   setCheckedList((checkedList) => [...checkedList, "0"]);
+              // }}
+              key={item.id}
+              data={item}
+              checked={checked}
+              onChangeCheckBox={() => setChecked((checked) => !checked)}
+              badges={[{ color: "red", title: "Bug2" }]}
+            />
+          ))}
         </div>
+      </div>
+      <div className={styles.paginationContainer}>
+        <Pagination
+          maxPage={maxPage}
+          currentPage={page}
+          onClickPageButton={(PageNumber) => setPage(PageNumber)}
+        />
       </div>
     </>
   );
 };
-
 
 export default ListContainer;
