@@ -62,3 +62,9 @@
 .filterItem {
   position: relative;
 }
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  
+}
