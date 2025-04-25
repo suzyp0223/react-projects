@@ -15,11 +15,9 @@ const footerItems = [
   {
     title: "Security",
     link: "https://github.com/security",
-    title: "Status",
-    link: "https://www.githubstaus.com",
-    title: "Docs",
-    link: "https://docs.github.com/en",
   },
+  { title: "Status", link: "https://www.githubstaus.com" },
+  { title: "Docs", link: "https://docs.github.com/en" },
   {
     title: "Contact Github",
     link: "https://support.github.com/?target=dotcom-footer",
@@ -27,15 +25,12 @@ const footerItems = [
   {
     title: "Pricing",
     link: "https://github.com/pricing",
-    title: "API",
-    link: "https://docs.github.com/en",
-    title: "Training",
-    link: "https://services.github.com/",
-    title: "Blog",
-    link: "https://github.blog/",
-    title: "About",
-    link: "`https://github.com/about",
   },
+
+  { title: "API", link: "https://docs.github.com/en" },
+  { title: "Training", link: "https://services.github.com/" },
+  { title: "Blog", link: "https://github.blog/" },
+  { title: "About", link: "https://github.com/about" },
 ];
 
 const Footer = () => {
