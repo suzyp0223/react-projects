@@ -114,42 +114,44 @@ const ListContainer = () => {
 };
 
 // 탭 컴포넌트
-function ListFilter({ onChangeFilter }) {
-  const [showModal, setShowModal] = useState(false);
-
+function ListFilter() {
   return (
     <>
       <div className={styles.filterLists}>
-        <ListFilterItem onClick={() => setShowModal(true)}>
-          Author
-        </ListFilterItem>
+        <ListFilterItem>Author</ListFilterItem>
         <ListFilterItem>Label</ListFilterItem>
         <ListFilterItem>Projects</ListFilterItem>
         <ListFilterItem>Milestones</ListFilterItem>
         <ListFilterItem>Assignees</ListFilterItem>
         <ListFilterItem>Sort</ListFilterItem>
       </div>
-      <Modal
-        opened={showModal}
-        onClose={() => setShowModal(false)}
-        placeholder="Filter labels"
-        searchDataList={["bug", "action", "report", "labels"]}
-        onClickCell={() => {
-          // 클릭된 정보를 통해 리스트 필터링
-          onChangeFilter();
-        }}
-      />
     </>
   );
 }
 
-//children은 태그를 여는 것 처럼 사용 가능
-function ListFilterItem({ onClick, children }) {
+//children은 태그를 여는 것 처럼 사용 가능. 모달컴포넌트
+function ListFilterItem({ onClick, children, onChangeFilter }) {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
-      <span role="button" onClick={onClick}>
-        {children} ▾
-      </span>
+      <div className={styles.filterItem}>
+        <span role="button" onClick={() => setShowModal(true)}>
+          {children} ▾
+        </span>
+        <div className={styles.modalContainer}>
+          <Modal
+            opened={showModal}
+            onClose={() => setShowModal(false)}
+            placeholder="Filter labels"
+            searchDataList={["bug", "action", "report", "labels"]}
+            onClickCell={() => {
+              // 클릭된 정보를 통해 리스트 필터링
+              onChangeFilter();
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 }

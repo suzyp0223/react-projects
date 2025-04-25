@@ -14,7 +14,10 @@
   border-bottom: 1px solid #d0d7de;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  flex-direction: row-reverse;
+
+  /* x버튼 오른쪽으로 위치 */
+  /* justify-content: space-between */
 }
 
 .header > span {
@@ -26,7 +29,6 @@
 .header > button {
   border: none;
   background: transparent;
-  text-align: right;
 }
 
 .opened {
