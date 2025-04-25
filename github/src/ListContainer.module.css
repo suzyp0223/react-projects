@@ -29,42 +29,18 @@
   padding: 16px;
 }
 
-.filterLists {
-  display: flex;
-  align-items: center;
-}
-
-.filterLists > div > span {
-  padding: 0 16px;
-  line-height: 21px;
-  cursor: pointer;
-  color: #57606a;
-}
-
-.filterLists > div > span:hover {
-  color: #000000;
-}
-
 .textFilter {
   margin-right: 8px;
   line-height: 21px;
   cursor: pointer;
 }
+
 .selected {
   font-weight: 800;
-}
-
-.modalContainer {
-  top: 20px;
-  left: 20px;
-  position: absolute;
-}
-.filterItem {
-  position: relative;
 }
 
 .paginationContainer {
   display: flex;
   justify-content: center;
-  
+
 }

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import styles from "./ListContainer.module.css";
-import cx from "clsx";
 
 import Button from "./components/Button";
 import ListItem from "./components/ListItem";
 import ListItemLayout from "./components/ListItemLayout";
-import Modal from "./components/Modal";
+import OpenClosedFilters from "./components/OpenClosedFilters";
 import Pagination from "./components/Pagination";
+import ListFilter from "./components/ListFilter";
 
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
@@ -131,84 +131,5 @@ const ListContainer = () => {
   );
 };
 
-// 탭 컴포넌트
-function ListFilter() {
-  return (
-    <>
-      <div className={styles.filterLists}>
-        <ListFilterItem>Author</ListFilterItem>
-        <ListFilterItem>Label</ListFilterItem>
-        <ListFilterItem>Projects</ListFilterItem>
-        <ListFilterItem>Milestones</ListFilterItem>
-        <ListFilterItem>Assignees</ListFilterItem>
-        <ListFilterItem>Sort</ListFilterItem>
-      </div>
-    </>
-  );
-}
-
-//children은 태그를 여는 것 처럼 사용 가능. 모달컴포넌트
-function ListFilterItem({ onClick, children, onChangeFilter }) {
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <>
-      <div className={styles.filterItem}>
-        <span role="button" onClick={() => setShowModal(true)}>
-          {children} ▾
-        </span>
-        <div className={styles.modalContainer}>
-          <Modal
-            opened={showModal}
-            onClose={() => setShowModal(false)}
-            placeholder="Filter labels"
-            searchDataList={["bug", "action", "report", "labels"]}
-            onClickCell={() => {
-              // 클릭된 정보를 통해 리스트 필터링
-              onChangeFilter();
-            }}
-          />
-        </div>
-      </div>
-    </>
-  );
-}
-
-/* 반복되는 코드2를  컴포넌트로 분리 3*/
-function OpenClosedFilters({ data }) {
-  const [isOpenMode, setIsOpenMode] = useState(true);
-  const openModeDataSize = 1;
-  const closeModeDataSize = 2;
-
-  return (
-    <>
-      <OpenClosedFilter
-        size={openModeDataSize}
-        state="Open"
-        selected={isOpenMode}
-        onClick={() => setIsOpenMode(true)}
-      />
-      <OpenClosedFilter
-        size={closeModeDataSize}
-        state="Closed"
-        selected={!isOpenMode}
-        onClick={() => setIsOpenMode(false)}
-      />
-    </>
-  );
-}
-
-/* 반복되는 코드를  컴포넌트로 분리 2*/
-function OpenClosedFilter({ size, state, onClick, selected }) {
-  return (
-    <span
-      role="button"
-      className={cx(styles.textFilter, { [styles.selected]: selected })}
-      onClick={onClick}
-    >
-      {size} {state}
-    </span>
-  );
-}
 
 export default ListContainer;
