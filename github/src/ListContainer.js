@@ -5,6 +5,7 @@ import cx from "clsx";
 import Button from "./components/Button";
 import ListItem from "./components/ListItem";
 import ListItemLayout from "./components/ListItemLayout";
+import Modal from "./components/Modal";
 
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
@@ -107,15 +108,26 @@ const ListContainer = () => {
 
 // 탭 컴포넌트
 function ListFilter() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <div className={styles.filterLists}>
-      <ListFilterItem>Author</ListFilterItem>
-      <ListFilterItem>Label</ListFilterItem>
-      <ListFilterItem>Projects</ListFilterItem>
-      <ListFilterItem>Milestones</ListFilterItem>
-      <ListFilterItem>Assignees</ListFilterItem>
-      <ListFilterItem>Sort</ListFilterItem>
-    </div>
+    <>
+      <div className={styles.filterLists}>
+        <ListFilterItem onClick={() => setShowModal(true)}>
+          Author
+        </ListFilterItem>
+        <ListFilterItem>Label</ListFilterItem>
+        <ListFilterItem>Projects</ListFilterItem>
+        <ListFilterItem>Milestones</ListFilterItem>
+        <ListFilterItem>Assignees</ListFilterItem>
+        <ListFilterItem>Sort</ListFilterItem>
+      </div>
+      <Modal
+        opened={showModal}
+        onClose={() => setShowModal(false)}
+        placeholder="Filter labels"
+      />
+    </>
   );
 }
 
