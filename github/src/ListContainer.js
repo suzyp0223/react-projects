@@ -10,6 +10,7 @@ import Modal from "./components/Modal";
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
   const [inputValue, setInputValue] = useState("is:pr is:open");
+  const [list, setList] = useState([]);
 
   // 리스트 체크박스
   // const [checkedList, setCheckedList] = useState([]);
@@ -77,7 +78,13 @@ const ListContainer = () => {
 
       <OpenClosedFilters />
       <ListItemLayout className={styles.listFilter}>
-        <ListFilter />
+        <ListFilter
+          onChangeFilter={(filteredData) => {
+            // 필터링된 요소에 맞게 데이터를 불러오기
+            // const data = getDate("필터링된 정보");
+            // setList(data);
+          }}
+        />
       </ListItemLayout>
       <div className={styles.container}>
         <ListItem
@@ -107,7 +114,7 @@ const ListContainer = () => {
 };
 
 // 탭 컴포넌트
-function ListFilter() {
+function ListFilter({ onChangeFilter }) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -126,6 +133,11 @@ function ListFilter() {
         opened={showModal}
         onClose={() => setShowModal(false)}
         placeholder="Filter labels"
+        searchDataList={["bug", "action", "report", "labels"]}
+        onClickCell={() => {
+          // 클릭된 정보를 통해 리스트 필터링
+          onChangeFilter();
+        }}
       />
     </>
   );
@@ -134,9 +146,11 @@ function ListFilter() {
 //children은 태그를 여는 것 처럼 사용 가능
 function ListFilterItem({ onClick, children }) {
   return (
-    <span role="button" onClick={onClick}>
-      {children}▾
-    </span>
+    <>
+      <span role="button" onClick={onClick}>
+        {children} ▾
+      </span>
+    </>
   );
 }
 
