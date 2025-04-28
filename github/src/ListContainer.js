@@ -128,11 +128,12 @@ const ListContainer = () => {
               //   }
               //   setCheckedList((checkedList) => [...checkedList, "0"]);
               // }}
-              key={item.id}
+
               data={item}
+              key={item.id}
               checked={checked}
               onChangeCheckBox={() => setChecked((checked) => !checked)}
-              badges={[{ color: "red", title: "Bug2" }]}
+              // badges={[{ color: "red", title: "Bug2" }]}
             />
           ))}
         </div>
