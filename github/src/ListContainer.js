@@ -10,6 +10,8 @@ import OpenClosedFilters from "./components/OpenClosedFilters";
 import Pagination from "./components/Pagination";
 import ListFilter from "./components/ListFilter";
 
+const GITHUB_API = "https://api.github.com";
+
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
   const [inputValue, setInputValue] = useState("is:pr is:open");
@@ -38,17 +40,27 @@ const ListContainer = () => {
   //   console.log({ inputValue });
   // }, [inputValue]);
 
-  async function getData() {
+  // pageParam: getData할때 page스테이트를 외부에서 받음 useEffect에서 page를 인자로 받아야
+  //
+  async function getData(pageParam) {
     const { data } = await axios.get(
-      `https://api.github.com/repos/facebook/react/issues`,
+      `${GITHUB_API}/repos/facebook/react/issues`,
+
+      // params는 객체형태로 보내야함. 약속된 키: {page}.
+      // pageParam을 page:pageParam으로 넘겨줘야 페이지네이션이 됨.
+      { params: { page: pageParam } },
     );
     setList(data);
   }
 
   // 유저가 볼수있는 화면이 그려지고난 후에 useEffect 훅이 작동(getData()작동)
+  // useEffect 디펜던시[ ]에서 page를 인자로 받아야[page]
+  // 페이지가 바뀔때마다 getDate가 불려짐.
   useEffect(() => {
-    getData();
-  }, []); //
+    getData(page);
+  }, [page]);
+
+  console.log({ list });
 
   return (
     <>

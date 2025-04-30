@@ -8,7 +8,7 @@ import ListItemLayout from "./ListItemLayout";
 import Badge from "./Badge";
 
 dayjs.extend(relativeTime);
-dayjs.locale('ko'); 
+dayjs.locale('ko');
 
 const ListItem = ({
   checked,
