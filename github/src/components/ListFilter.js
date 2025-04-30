@@ -1,38 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import styles from "./ListFilter.module.css";
 
 import Modal from "./Modal";
+import { GITHUB_API } from "../api";
 
 // 탭 컴포넌트
 export default function ListFilter({ onChangeFilter }) {
   const [showModal, setShowModal] = useState(false);
+  const [list, setList] = useState([]);
   const filterList = [
-    "Author",
-    "Label",
-    "Projects",
+    // "Author",
+    "Labels",
+    // "Projects",
     "Milestones",
     "Assignees",
-    "Sort",
   ];
+
+  async function getData(apiPath) {
+    const data = await axios.get(
+      `${GITHUB_API}/repos/facebook/react/${apiPath}`,
+    );
+    // console.log({ data });
+
+    let result = [];
+    switch (apiPath) {
+      case "assignees":
+        result = data.data.map((d) => ({
+          name: d.login,
+        }));
+        break;
+      case "milestones":
+        result = data.data.map((d) => ({
+          name: d.title,
+        }));
+        break;
+      case "labels":
+      default:
+        result = data.data;
+    }
+    // console.log("result", result);
+    // 데이터 가공 name, title, login -> name
+  }
+
+  useEffect(() => {
+    if (showModal) {
+      const apiPath = `${showModal.toLowerCase()}`;
+      getData(apiPath);
+    }
+  }, [showModal]);
 
   return (
     <>
       <div className={styles.filterLists}>
         {/* // 1번모달 열린 상태에서 2번모달 열렸을때 1번 꺼지게 변경 -> */}
 
-        {Array.isArray(filterList) &&
-          filterList.map((filter) => (
-            <ListFilterItem
-              key={filter}
-              searchDataList={[]}
-              onClick={() => setShowModal(filter)}
-              onClose={() => setShowModal()}
-              showModal={showModal === filter}
-            >
-              {filter}
-            </ListFilterItem>
-          ))}
+        {filterList.map((filter) => (
+          <ListFilterItem
+            key={filter}
+            searchDataList={list}
+            onClick={() => setShowModal(filter)}
+            onClose={() => setShowModal()}
+            showModal={showModal === filter}
+          >
+            {filter}
+          </ListFilterItem>
+        ))}
         {/* <ListFilterItem>Label</ListFilterItem>
         <ListFilterItem>Projects</ListFilterItem>
         <ListFilterItem>Milestones</ListFilterItem>
@@ -57,20 +91,31 @@ function ListFilterItem({
   // const [showModal, setShowModal] = useState(false);
   // 1번모달 열린 상태에서 2번모달 열렸을때 1번 꺼지게 변경 -> showModal스테이트를 ListFilter함수로 이동.
 
+  const [list, setList] = useState(searchDataList); /** data */
+
+  useEffect(() => {
+    setList(searchDataList);
+  }, [searchDataList]);
+
   return (
     <>
       <div className={styles.filterItem}>
-        
         <span role="button" onClick={onClick}>
-          {children}▾
+          {children} ▾
         </span>
         <div className={styles.modalContainer}>
           <Modal
-          title={children}
+            title={children}
             opened={showModal}
             onClose={onClose}
-            placeholder="Filter labels"
-            searchDataList={["bug", "action", "report", "labels"]}
+            placeholder={placeholder}
+            // searchDataList={[
+            //   { name: "bug" },
+            //   { name: "action" },
+            //   { name: "report" },
+            //   { name: "labels" },
+            // ]}
+            searchDataList={list}
             onClickCell={(cellInfo) => {
               // 클릭된 정보를 통해 리스트 필터링
               // onChangeFilter(data);

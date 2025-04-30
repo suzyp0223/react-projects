@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -10,8 +9,7 @@ import ListItemLayout from "./components/ListItemLayout";
 import OpenClosedFilters from "./components/OpenClosedFilters";
 import Pagination from "./components/Pagination";
 import ListFilter from "./components/ListFilter";
-
-const GITHUB_API = "https://api.github.com";
+import { GITHUB_API } from "./api";
 
 const ListContainer = () => {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
