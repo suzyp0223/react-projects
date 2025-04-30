@@ -60,11 +60,13 @@ function ListFilterItem({
   return (
     <>
       <div className={styles.filterItem}>
+        
         <span role="button" onClick={onClick}>
           {children}▾
         </span>
         <div className={styles.modalContainer}>
           <Modal
+          title={children}
             opened={showModal}
             onClose={onClose}
             placeholder="Filter labels"
