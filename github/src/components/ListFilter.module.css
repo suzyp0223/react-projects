@@ -23,3 +23,11 @@
   left: 20px;
   position: absolute;
 }
+
+.textFilter {
+  margin: 5px;
+}
+
+.selected {
+  font-weight: 700;
+}

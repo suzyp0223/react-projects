@@ -20,6 +20,7 @@ const ListContainer = () => {
 
   // currentPage 변경 state
   const [page, setPage] = useState(1);
+  const [isOpenMode, setIsOpenMode] = useState(true);
   const maxPage = 10;
   // const MAX_PAGE = getData().totalCount
 
@@ -42,13 +43,14 @@ const ListContainer = () => {
 
   // pageParam: getData할때 page스테이트를 외부에서 받음 useEffect에서 page를 인자로 받아야
   //
-  async function getData(pageParam) {
+  async function getData(params) {
     const { data } = await axios.get(
       `${GITHUB_API}/repos/facebook/react/issues`,
 
       // params는 객체형태로 보내야함. 약속된 키: {page}.
-      // pageParam을 page:pageParam으로 넘겨줘야 페이지네이션이 됨.
-      { params: { page: pageParam } },
+      // pageParam파라미터를 page:pageParam으로 넘겨줘야 페이지네이션이 됨.
+      // { params: { page: pageParam, state: isOpenMode ? "open" : "closed" } },
+      { params },
     );
     setList(data);
   }
@@ -57,10 +59,10 @@ const ListContainer = () => {
   // useEffect 디펜던시[ ]에서 page를 인자로 받아야[page]
   // 페이지가 바뀔때마다 getDate가 불려짐.
   useEffect(() => {
-    getData(page);
-  }, [page]);
+    getData({ page, state: isOpenMode ? "open" : "closed" });
+  }, [page, isOpenMode]);
 
-  console.log({ list });
+  // console.log({ list });
 
   return (
     <>
@@ -114,7 +116,10 @@ const ListContainer = () => {
           /> */}
         </>
 
-        <OpenClosedFilters />
+        <OpenClosedFilters
+          isOpenMode={isOpenMode}
+          onClickMode={setIsOpenMode}
+        />
         <div className={styles.container}>
           <ListItemLayout className={styles.listFilter}>
             <ListFilter
@@ -125,29 +130,30 @@ const ListContainer = () => {
               }}
             />
           </ListItemLayout>
-          {list.map((item) => (
-            <ListItem
-              // checked={checkedList.filter((item) => item.id === "0")[0]}
-              // onChangeCheckBox={() => {
-              //   const currentChecked = checkedList.filter(
-              //     (item) => item.id === "0",
-              //   )[0];
+          {Array.isArray(list) &&
+            list.map((item) => (
+              <ListItem
+                // checked={checkedList.filter((item) => item.id === "0")[0]}
+                // onChangeCheckBox={() => {
+                //   const currentChecked = checkedList.filter(
+                //     (item) => item.id === "0",
+                //   )[0];
 
-              //   if (currentChecked) {
-              //     // 리스트에서 빼기
-              //   } else {
-              //     // 리스트에 추가하기
-              //   }
-              //   setCheckedList((checkedList) => [...checkedList, "0"]);
-              // }}
+                //   if (currentChecked) {
+                //     // 리스트에서 빼기
+                //   } else {
+                //     // 리스트에 추가하기
+                //   }
+                //   setCheckedList((checkedList) => [...checkedList, "0"]);
+                // }}
 
-              data={item}
-              key={item.id}
-              checked={checked}
-              onChangeCheckBox={() => setChecked((checked) => !checked)}
-              // badges={[{ color: "red", title: "Bug2" }]}
-            />
-          ))}
+                data={item}
+                key={item.id}
+                checked={checked}
+                onChangeCheckBox={() => setChecked((checked) => !checked)}
+                // badges={[{ color: "red", title: "Bug2" }]}
+              />
+            ))}
         </div>
       </div>
       <div className={styles.paginationContainer}>
