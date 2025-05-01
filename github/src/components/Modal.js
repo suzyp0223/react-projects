@@ -12,9 +12,9 @@ const Modal = ({
   searchDataList,
   onClickCell,
 }) => {
-  const [searchValue, setSearchValue] = useState("");
   // 필터링된 데이터상태- 원천데이터가 있어야해서 searchDataList가 초기값
   const [filteredData, setFilteredData] = useState(searchDataList);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     setFilteredData(searchDataList);
@@ -25,11 +25,17 @@ const Modal = ({
   //   console.log("searchValue", { searchValue });
   // }, [searchValue]);
 
-  // useEffect(() => {
-  //   //item.some("...")=> 일치하는걸 필터링함.
-  //   // setFilteredData(searchDataList.filter((item) => item.some("...")));
-  //   setFilteredData(searchDataList.filter((item) => item === searchValue));
-  // }, [searchDataList, searchValue]);
+  useEffect(() => {
+    //item.some("...")=> 일치하는걸 필터링함.
+    // setFilteredData(searchDataList.filter((item) => item.some("...")));
+    if (searchValue !== "") {
+      const filteredSearchList = searchDataList.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase()),
+      );
+      // setFilteredData(searchDataList.filter((item) => item === searchValue));
+      setFilteredData(filteredSearchList);
+    }
+  }, [searchDataList, searchValue]);
 
   return (
     <div className={cx(styles.modal, { [styles.opened]: opened })}>
@@ -47,13 +53,17 @@ const Modal = ({
 
       {/* 맵을 통해 순회하여 원하는 컴포넌트로 그려줌 */}
       {Array.isArray(filteredData) &&
-      filteredData.map((data) => (
-        <div key={data.name} onClick={() => onClickCell(data)} className={styles.item}>
-          {data.name}
-        </div>
-      ))}
+        filteredData.map((data, index) => (
+          <div
+            key={`${data.name}-${index}`}
+            onClick={() => onClickCell(data)}
+            className={styles.item}
+          >
+            {data.name}
+          </div>
+        ))}
     </div>
   );
-};      
+};
 
 export default Modal;

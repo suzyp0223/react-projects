@@ -10,13 +10,7 @@ import { GITHUB_API } from "../api";
 export default function ListFilter({ onChangeFilter }) {
   const [showModal, setShowModal] = useState(false);
   const [list, setList] = useState([]);
-  const filterList = [
-    // "Author",
-    "Labels",
-    // "Projects",
-    "Milestones",
-    "Assignees",
-  ];
+  const filterList = ["issues", "labels", "milestones", "assignees"];
 
   async function getData(apiPath) {
     const data = await axios.get(
@@ -36,12 +30,21 @@ export default function ListFilter({ onChangeFilter }) {
           name: d.title,
         }));
         break;
+      case "issues":
+        result = data.data.flatMap((d) =>
+          d.labels.map((label) => ({
+            name: label.name,
+            color: label.color,
+          })),
+        );
+        break;
       case "labels":
       default:
         result = data.data;
     }
     // console.log("result", result);
     // 데이터 가공 name, title, login -> name
+    setList(result);
   }
 
   useEffect(() => {
@@ -93,6 +96,11 @@ function ListFilterItem({
 
   const [list, setList] = useState(searchDataList); /** data */
 
+  /**
+    프롭스가 변하면 list 스테이트도 변하기 때문에
+    useEffect문에 디펜던시(의존성)을 지정한다.
+    searchDataList를 디펜던시로 등록한다.
+  */
   useEffect(() => {
     setList(searchDataList);
   }, [searchDataList]);
@@ -109,15 +117,10 @@ function ListFilterItem({
             opened={showModal}
             onClose={onClose}
             placeholder={placeholder}
-            // searchDataList={[
-            //   { name: "bug" },
-            //   { name: "action" },
-            //   { name: "report" },
-            //   { name: "labels" },
-            // ]}
-            searchDataList={list}
+            searchDataList={list} // list는 API 결과가 들어감
             onClickCell={(cellInfo) => {
               // 클릭된 정보를 통해 리스트 필터링
+              // const data = getData('필터링 된 정보');
               // onChangeFilter(data);
             }}
           />
