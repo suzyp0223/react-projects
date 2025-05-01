@@ -25,10 +25,15 @@ const Modal = ({
   //   console.log("searchValue", { searchValue });
   // }, [searchValue]);
 
+  /*
+    원천데이터인 searchDataList를 가공해서 필터링.
+  */
   useEffect(() => {
     //item.some("...")=> 일치하는걸 필터링함.
     // setFilteredData(searchDataList.filter((item) => item.some("...")));
-    if (searchValue !== "") {
+    if (searchValue === "") {
+      setFilteredData(searchDataList);
+    } else {
       const filteredSearchList = searchDataList.filter((item) =>
         item.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
@@ -51,17 +56,25 @@ const Modal = ({
         />
       </div>
 
-      {/* 맵을 통해 순회하여 원하는 컴포넌트로 그려줌 */}
-      {Array.isArray(filteredData) &&
-        filteredData.map((data, index) => (
-          <div
-            key={`${data.name}-${index}`}
-            onClick={() => onClickCell(data)}
-            className={styles.item}
-          >
-            {data.name}
-          </div>
-        ))}
+      <div className={styles.list}>
+        {/* 맵을 통해 순회하여 원하는 컴포넌트로 그려줌 */}
+        {Array.isArray(filteredData) &&
+          filteredData.map((data, index) => (
+            <div
+              onClick={() => {
+                const isLabel = title.toLowerCase() === "labels";
+                const paramKey = isLabel ? "labels" : title.toLowerCase();
+
+                // 변수를 키에 넣으려면 []로 묶는다.
+                onClickCell({ [paramKey]: data.name });
+              }}
+              className={styles.item}
+              key={`${data.name}-${index}`}
+            >
+              {data.name}
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

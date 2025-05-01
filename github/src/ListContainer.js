@@ -20,6 +20,7 @@ const ListContainer = () => {
   // currentPage 변경 state
   const [page, setPage] = useState(1);
   const [isOpenMode, setIsOpenMode] = useState(true);
+  const [params, setParams] = useState();
   const maxPage = 10;
   // const MAX_PAGE = getData().totalCount
 
@@ -57,9 +58,9 @@ const ListContainer = () => {
   // 유저가 볼수있는 화면이 그려지고난 후에 useEffect 훅이 작동(getData()작동)
   // useEffect 디펜던시[ ]에서 page를 인자로 받아야[page]
   // 페이지가 바뀔때마다 getDate가 불려짐.
-  useEffect(() => {
-    getData({ page, state: isOpenMode ? "open" : "closed" });
-  }, [page, isOpenMode]);
+  useEffect(() => {  // ...params 파람즈객체 그대로 가져옴
+    getData({ page, state: isOpenMode ? "open" : "closed", ...params });
+  }, [page, isOpenMode, params]);
 
   // console.log({ list });
 
@@ -122,10 +123,11 @@ const ListContainer = () => {
         <div className={styles.container}>
           <ListItemLayout className={styles.listFilter}>
             <ListFilter
-              onChangeFilter={(filteredData) => {
+              onChangeFilter={(params) => {
                 // 필터링된 요소에 맞게 데이터를 불러오기
                 // const data = getDate("필터링된 정보");
                 // setList(data);
+                setParams(params);
               }}
             />
           </ListItemLayout>

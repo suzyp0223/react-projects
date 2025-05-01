@@ -10,8 +10,9 @@ import { GITHUB_API } from "../api";
 export default function ListFilter({ onChangeFilter }) {
   const [showModal, setShowModal] = useState(false);
   const [list, setList] = useState([]);
-  const filterList = ["issues", "labels", "milestones", "assignees"];
+  const filterList = ["labels", "milestones", "assignees", "issues"];
 
+  // 데이터 가공 name, title, login -> name
   async function getData(apiPath) {
     const data = await axios.get(
       `${GITHUB_API}/repos/facebook/react/${apiPath}`,
@@ -43,7 +44,6 @@ export default function ListFilter({ onChangeFilter }) {
         result = data.data;
     }
     // console.log("result", result);
-    // 데이터 가공 name, title, login -> name
     setList(result);
   }
 
@@ -66,6 +66,7 @@ export default function ListFilter({ onChangeFilter }) {
             onClick={() => setShowModal(filter)}
             onClose={() => setShowModal()}
             showModal={showModal === filter}
+            onChangeFilter={onChangeFilter}
           >
             {filter}
           </ListFilterItem>
@@ -118,10 +119,11 @@ function ListFilterItem({
             onClose={onClose}
             placeholder={placeholder}
             searchDataList={list} // list는 API 결과가 들어감
-            onClickCell={(cellInfo) => {
+            onClickCell={(params) => {
+              // onClickCell={(cellInfo) => {
               // 클릭된 정보를 통해 리스트 필터링
               // const data = getData('필터링 된 정보');
-              // onChangeFilter(data);
+              onChangeFilter(params);
             }}
           />
         </div>
