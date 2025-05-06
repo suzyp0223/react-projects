@@ -38,7 +38,7 @@ export default function Header() {
           Star
         </Button>
       </div>
-      <Tabs title="title" number={5}/>
+      <Tabs title="title" number={5} />
     </div>
   );
 }

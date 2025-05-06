@@ -1,13 +1,13 @@
-import { Route, Routes } from "react-router-dom";
+import ListContainer from "../ListContainer";
+import Footer from "../Footer";
 
-import Issue from "./pages/Issue";
-
-function App() {
+function Issue() {
   return (
-    <Routes>
-      <Route path="/" element={<Issue />} />
-    </Routes>
+    <>
+    <ListContainer />
+    <Footer />
+    </>
   );
 }
 
-export default App;
+export default Issue;
