@@ -1,17 +1,19 @@
 import { useRef } from "react";
 
 import cx from "clsx";
-
-import Button from "./../components/Button";
 import styles from "./CreateIssue.module.css";
 
+import Button from "../components/Button";
+import TextField from "../components/TextField";
+
 const CreateIssue = () => {
+  // form 똑똑하게 다루는 방법: ref
   const ref = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
-    if(e.target.elements.title.value === '') {
-      alert('타이틀을 입력해주세요');
+    if (e.target.elements.title.value === "") {
+      alert("타이틀을 입력해주세요");
       ref.current.focus();
     }
     // console.log("e", e);
@@ -25,20 +27,16 @@ const CreateIssue = () => {
       <div className={styles.avatar}></div>
       <div className={cx(styles.inputWrapper, styles.border)}>
         <form onSubmit={handleSubmit}>
-          <input
+          {/* forwardRef는 input을 사용할수 없는 상황에서 쓰임. 즉 function을 커스텀하게 사용해야할 때.*/}
+          {/* <input
             type="text"
-            id="title"
             name="title"
             ref={ref}
             className={cx(styles.input, styles.border)}
             placeholder="Title"
-          />
-          <textarea
-            id="body"
-            name="body"
-            className={cx(styles.textarea, styles.input)}
-            placeholder="Leave Comment"
-          ></textarea>
+            /> */}
+          <TextField ref={ref} name="title" placeholder="Title" />
+          <TextField type="textarea" name="body" placeholder="Leave comment" />
           <div className={styles.buttonWrapper}>
             <Button
               type="submit"
