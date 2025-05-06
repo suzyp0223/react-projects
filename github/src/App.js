@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
-import Issue from './pages/Ssue';
+import Issue from './pages/issue';
 
 function App() {
   return (
