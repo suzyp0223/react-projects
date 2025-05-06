@@ -1,63 +1,26 @@
-import { useRef, useState, useEffect } from "react";
-
+import { useRef } from "react";
 import cx from "clsx";
+
 import styles from "./CreateIssue.module.css";
 
 import Button from "../components/Button";
 import TextField from "../components/TextField";
+import useForm from "../hooks";
 
 const CreateIssue = () => {
   // form 똑똑하게 다루는 방법: useRef()
   const inputRef = useRef();
   const textareaRef = useRef();
-  const [inputValues, setInputValues] = useState({ title: "", body: "" });
-  const [errors, setErrors] = useState({});
 
-  //여러번 submit 버튼 클릭되는걸 방지하는 스테이트
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    setIsSubmitting(true);
-    const validateResult = validate(inputValues);
-    setErrors(validateResult);
-
-    const refs = {title: inputRef, body:textareaRef};
-    const errorKeys = Object.keys(validateResult); //[]
-
-    if (errorKeys.length !== 0) {
-      const key = errorKeys[0];
-      alert(validateResult[key]);
-      refs[key].current.focus();
-
-      //ref control
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (errorKeys.length === 0) {
-      console.log("Submit 성공");
-    }
-
-    // if (e.target.elements.title.value === "") {
-    //   alert("타이틀을 입력해주세요");
-    //   ref.current.focus();
-    // }
-    // console.log("e", e);
-    // const formData = new FormData(e.target);
-    // const data = Object.fromEntries(formData.entries());
-    // console.log("제출된 데이터:", data);
-  }
-
-  function onChange(e) {
-    const { name, value } = e.target;
-    setInputValues({ ...inputValues, [name]: value });
-  }
-
-  // useEffect(() => {
-  //   console.log("setInputValues:", setInputValues);
-  // }, [setInputValues]);
+  const { isSubmitting, inputValues, onChange, handleSubmit, errors } = useForm(
+    {
+      initialValues: { title: "", body: "" },
+      onSubmit: () => console.log("완료"),
+      onErrors: () => console.warn("유효성 검사 실패!"),
+      validate,
+      refs: { title: inputRef, body: textareaRef },
+    },
+  );
 
   return (
     <div className={styles.container}>
@@ -76,7 +39,7 @@ const CreateIssue = () => {
             ref={inputRef}
             name="title"
             placeholder="Title"
-            vale={inputValues.title}
+            value={inputValues.title}
             onChange={onChange}
             error={errors.title}
           />
@@ -85,7 +48,7 @@ const CreateIssue = () => {
             ref={textareaRef}
             name="body"
             placeholder="Leave comment"
-            vale={inputValues.body}
+            value={inputValues.body}
             onChange={onChange}
             error={errors.body}
           />
@@ -98,7 +61,7 @@ const CreateIssue = () => {
                 color: "white",
                 marginTop: "5px",
               }}
-              disabled={isSubmitting }
+              disabled={isSubmitting}
             >
               Submit new Issue
             </Button>
