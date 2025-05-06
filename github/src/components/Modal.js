@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import cx from "clsx";
 
 import styles from "./Modal.module.css";
@@ -11,14 +11,11 @@ const Modal = ({
   placeholder,
   searchDataList,
   onClickCell,
+
 }) => {
   // 필터링된 데이터상태- 원천데이터가 있어야해서 searchDataList가 초기값
   const [filteredData, setFilteredData] = useState(searchDataList);
   const [searchValue, setSearchValue] = useState("");
-
-  useEffect(() => {
-    setFilteredData(searchDataList);
-  }, [searchDataList]);
 
   // // useState 작동 확인
   // useEffect(() => {
@@ -42,9 +39,27 @@ const Modal = ({
     }
   }, [searchDataList, searchValue]);
 
+
+  // 모달 외부 클릭시 모달종료
+  const modalRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose(); // 바깥 클릭시 모달 닫기
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  if (!opened) return null;
+
+
   return (
     <div className={cx(styles.modal, { [styles.opened]: opened })}>
-      <div className={styles.header}>
+      <div className={styles.header} ref={modalRef}>
         <span>Filter by {title}</span>
         <button onClick={onClose}>X</button>
       </div>

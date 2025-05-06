@@ -10,7 +10,8 @@ import { GITHUB_API } from "../api";
 export default function ListFilter({ onChangeFilter }) {
   const [showModal, setShowModal] = useState(false);
   const [list, setList] = useState([]);
-  const filterList = ["labels", "milestones", "assignees", "issues"];
+
+  const filterList = ["Labels", "Milestones", "Assignees", "Issues"];
 
   // 데이터 가공 name, title, login -> name
   async function getData(apiPath) {
@@ -64,7 +65,7 @@ export default function ListFilter({ onChangeFilter }) {
             key={filter}
             searchDataList={list}
             onClick={() => setShowModal(filter)}
-            onClose={() => setShowModal()}
+            onClose={() => setShowModal(null)}
             showModal={showModal === filter}
             onChangeFilter={onChangeFilter}
           >
@@ -96,7 +97,6 @@ function ListFilterItem({
   // 1번모달 열린 상태에서 2번모달 열렸을때 1번 꺼지게 변경 -> showModal스테이트를 ListFilter함수로 이동.
 
   const [list, setList] = useState(searchDataList); /** data */
-
   /**
     프롭스가 변하면 list 스테이트도 변하기 때문에
     useEffect문에 디펜던시(의존성)을 지정한다.
@@ -116,7 +116,7 @@ function ListFilterItem({
           <Modal
             title={children}
             opened={showModal}
-            onClose={onClose}
+            onClose={onClose} // 부모에서 showModal을 null로 설정
             placeholder={placeholder}
             searchDataList={list} // list는 API 결과가 들어감
             onClickCell={(params) => {

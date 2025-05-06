@@ -28,10 +28,10 @@ const ListContainer = () => {
   // const MAX_PAGE = getData().totalCount
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get("page"), 10);
+  const page = parseInt(searchParams.get("page") ?? '1', 10);
   console.log("{page}: ", { page });
   // console.log('searchParams' , searchParams.get('name'));
-  const mode = searchParams.get("mode");
+  const state = searchParams.get("state");
 
   // 리스트 체크박스
   // const [checkedList, setCheckedList] = useState([]);
@@ -71,8 +71,10 @@ const ListContainer = () => {
     // ...params 파람즈객체 그대로 가져옴
     //   getData({ page, state: isOpenMode ? "open" : "closed", ...params });  // searchParams.get('mode') 코드로
     // }, [page, isOpenMode, params]);  // 인해 필요없어진 코드.
-    getData({ page, state: mode, ...params });
-  }, [page, mode, params]);
+    // getData({ page, state: mode, ...params });
+    // }, [page, mode, params]);
+    getData(searchParams);
+  }, [searchParams]);
 
   // console.log({ list });
 
@@ -129,8 +131,8 @@ const ListContainer = () => {
         </>
 
         <OpenClosedFilters
-          isOpenMode={mode !== "closed"}
-      onClickMode={(mode) => setSearchParams({ mode })}
+          isOpenMode={state !== "closed"}
+          onClickMode={(mode) => setSearchParams({ mode })}
         />
         <div className={styles.container}>
           <ListItemLayout className={styles.listFilter}>
@@ -139,7 +141,7 @@ const ListContainer = () => {
                 // 필터링된 요소에 맞게 데이터를 불러오기
                 // const data = getDate("필터링된 정보");
                 // setList(data);
-                setParams(params);
+                setSearchParams(params);
               }}
             />
           </ListItemLayout>
