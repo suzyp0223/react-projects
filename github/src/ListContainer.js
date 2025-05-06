@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 // 페이지네이션 쿼리로 페이지숫자표시 훅:useSearchParams
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 import styles from "./ListContainer.module.css";
 
@@ -28,8 +28,8 @@ const ListContainer = () => {
   // const MAX_PAGE = getData().totalCount
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get("page") ?? '1', 10);
-  console.log("{page}: ", { page });
+  const page = parseInt(searchParams.get("page") ?? "1", 10);
+  // console.log("{page}: ", { page });
   // console.log('searchParams' , searchParams.get('name'));
   const state = searchParams.get("state");
 
@@ -87,15 +87,17 @@ const ListContainer = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <Button
-            style={{
-              fontSize: "14px",
-              backgroundColor: "green",
-              color: "white",
-            }}
-          >
-            New Issue
-          </Button>
+          <Link to="/new" className={styles.link}>
+            <Button
+              style={{
+                fontSize: "14px",
+                backgroundColor: "green",
+                color: "white",
+              }}
+            >
+              New Issue
+            </Button>
+          </Link>
         </div>
         <>
           {/* <span
