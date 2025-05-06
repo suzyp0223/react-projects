@@ -18,3 +18,7 @@
   border-radius: 8px;
   resize: none;
 }
+
+.error {
+  outline-color: red;
+}

@@ -3,16 +3,26 @@ import cx from "clsx";
 
 import styles from "./TextField.module.css";
 
-const TextField = ({ type = "input", name, placeholder }, ref) => {
+const TextField = (
+  { type = "input", name, placeholder, onChange, value, error },
+  ref,
+) => {
+  console.log('error: ', {error});
   return type === "input" ? (
     <input
+      onChange={onChange}
+      value={value}
       name={name}
       ref={ref}
-      className={cx(styles.input, styles.border)}
+      className={cx(styles.input, styles.border, {
+        [styles.error]: Boolean(error),
+      })}
       placeholder={placeholder}
     />
   ) : (
     <textarea
+      onChange={onChange}
+      value={value}
       name={name}
       ref={ref}
       className={cx(styles.textarea, styles.input)}
