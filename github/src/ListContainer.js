@@ -47,7 +47,7 @@ const ListContainer = () => {
     const { data } = await axios.get(
       `${GITHUB_API}/repos/facebook/react/issues`,
 
-      // params는 객체형태로 보내야함. 약속된 키: {page}.
+    // params는 객체형태로 보내야함. 약속된 키: {page}.
       // pageParam파라미터를 page:pageParam으로 넘겨줘야 페이지네이션이 됨.
       // { params: { page: pageParam, state: isOpenMode ? "open" : "closed" } },
       { params },
