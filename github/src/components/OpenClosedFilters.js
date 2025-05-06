@@ -22,14 +22,14 @@ export default function OpenClosedFilters({ isOpenMode, onClickMode }) {
         selected={isOpenMode}
         // onClick={() => setIsOpenMode(true)} 온클릭함수를 onClickMode로 바꾸고
         // ListContainer.js에서 onClickMode는 {setIsOpenMode}가 되어야함.
-        onClick={() => onClickMode(true)}
+        onClick={() => onClickMode('open')}
       />
       <OpenClosedFilter
         // size={closeModeDataSize}
         state="Closed"
         selected={!isOpenMode}
         // onClick={() => setIsOpenMode(false)}
-        onClick={() => onClickMode(false)}
+        onClick={() => onClickMode('closed')}
       />
     </>
   );

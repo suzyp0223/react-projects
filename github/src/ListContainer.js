@@ -22,7 +22,7 @@ const ListContainer = () => {
   // currentPage 변경 state.
   // const [page, setPage] = useState(1); //queryParams사용하면 필요없음.
 
-  const [isOpenMode, setIsOpenMode] = useState(true);
+  // const [isOpenMode, setIsOpenMode] = useState(true); // searchParams.get('mode') 코드로인해 필요없어진 코드.
   const [params, setParams] = useState();
   const maxPage = 10;
   // const MAX_PAGE = getData().totalCount
@@ -31,6 +31,7 @@ const ListContainer = () => {
   const page = parseInt(searchParams.get("page"), 10);
   console.log("{page}: ", { page });
   // console.log('searchParams' , searchParams.get('name'));
+  const mode = searchParams.get("mode");
 
   // 리스트 체크박스
   // const [checkedList, setCheckedList] = useState([]);
@@ -68,8 +69,10 @@ const ListContainer = () => {
   // 페이지가 바뀔때마다 getDate가 불려짐.
   useEffect(() => {
     // ...params 파람즈객체 그대로 가져옴
-    getData({ page, state: isOpenMode ? "open" : "closed", ...params });
-  }, [page, isOpenMode, params]);
+    //   getData({ page, state: isOpenMode ? "open" : "closed", ...params });  // searchParams.get('mode') 코드로
+    // }, [page, isOpenMode, params]);  // 인해 필요없어진 코드.
+    getData({ page, state: mode, ...params });
+  }, [page, mode, params]);
 
   // console.log({ list });
 
@@ -126,8 +129,8 @@ const ListContainer = () => {
         </>
 
         <OpenClosedFilters
-          isOpenMode={isOpenMode}
-          onClickMode={setIsOpenMode}
+          isOpenMode={mode !== "closed"}
+      onClickMode={(mode) => setSearchParams({ mode })}
         />
         <div className={styles.container}>
           <ListItemLayout className={styles.listFilter}>
