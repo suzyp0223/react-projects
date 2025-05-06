@@ -37,6 +37,7 @@
   min-height: 200px;
   margin-top: 8px;
   border-radius: 8px;
+  resize: none;
 }
 
 .buttonWrapper {
