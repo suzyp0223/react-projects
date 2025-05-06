@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+// 페이지네이션 쿼리로 페이지숫자표시 훅:useSearchParams
+import { useSearchParams } from "react-router-dom";
 
 import styles from "./ListContainer.module.css";
 
@@ -17,12 +19,18 @@ const ListContainer = () => {
   const [checked, setChecked] = useState(false);
   const [list, setList] = useState([]); /* data */
 
-  // currentPage 변경 state
-  const [page, setPage] = useState(1);
+  // currentPage 변경 state.
+  // const [page, setPage] = useState(1); //queryParams사용하면 필요없음.
+
   const [isOpenMode, setIsOpenMode] = useState(true);
   const [params, setParams] = useState();
   const maxPage = 10;
   // const MAX_PAGE = getData().totalCount
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page"), 10);
+  console.log("{page}: ", { page });
+  // console.log('searchParams' , searchParams.get('name'));
 
   // 리스트 체크박스
   // const [checkedList, setCheckedList] = useState([]);
@@ -47,7 +55,7 @@ const ListContainer = () => {
     const { data } = await axios.get(
       `${GITHUB_API}/repos/facebook/react/issues`,
 
-    // params는 객체형태로 보내야함. 약속된 키: {page}.
+      // params는 객체형태로 보내야함. 약속된 키: {page}.
       // pageParam파라미터를 page:pageParam으로 넘겨줘야 페이지네이션이 됨.
       // { params: { page: pageParam, state: isOpenMode ? "open" : "closed" } },
       { params },
@@ -58,7 +66,8 @@ const ListContainer = () => {
   // 유저가 볼수있는 화면이 그려지고난 후에 useEffect 훅이 작동(getData()작동)
   // useEffect 디펜던시[ ]에서 page를 인자로 받아야[page]
   // 페이지가 바뀔때마다 getDate가 불려짐.
-  useEffect(() => {  // ...params 파람즈객체 그대로 가져옴
+  useEffect(() => {
+    // ...params 파람즈객체 그대로 가져옴
     getData({ page, state: isOpenMode ? "open" : "closed", ...params });
   }, [page, isOpenMode, params]);
 
@@ -161,7 +170,9 @@ const ListContainer = () => {
         <Pagination
           maxPage={maxPage}
           currentPage={page}
-          onClickPageButton={(PageNumber) => setPage(PageNumber)}
+          onClickPageButton={(PageNumber) =>
+            setSearchParams({ page: PageNumber })
+          }
         />
       </div>
     </>

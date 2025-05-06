@@ -1,7 +1,6 @@
 import cx from "clsx";
 import styles from "./Pagination.module.css";
 
-
 // 현재어떤 페이지를 보고있는지-currentPage, 최대페이지-maxPage
 const Pagination = ({ currentPage, maxPage, onClickPageButton }) => {
   return (
