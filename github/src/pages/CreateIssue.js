@@ -29,12 +29,13 @@ const CreateIssue = () => {
       try {
         const res = await axios.post(
           `${GITHUB_API}/repos/suzyp0223/react-projects/issues`,
-          {
-            // title: "Issue test",
-            // body: "이슈 생성 테스트중",
-            title: formData.title,
-            body: formData.body,
-          },
+          inputValues,
+          // {
+          //   // title: "Issue test",
+          //   // body: "이슈 생성 테스트중",
+          //   title: formData.title,
+          //   body: formData.body,
+          // },
           {
             headers: {
               Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
@@ -47,7 +48,6 @@ const CreateIssue = () => {
         setTimeout(() => {
           setSuccessMessage("");
           resetForm();
-          
         }, 3000);
       } catch (error) {
         console.error("이슈 생성 실패 ❌", error);
