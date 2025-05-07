@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import cx from "clsx";
 
 import styles from "./CreateIssue.module.css";
@@ -14,6 +15,7 @@ const CreateIssue = () => {
   // form 똑똑하게 다루는 방법: useRef()
   const inputRef = useRef();
   const textareaRef = useRef();
+  const navigate = useNavigate();
 
   const {
     isSubmitting,
@@ -34,7 +36,7 @@ const CreateIssue = () => {
           //   // title: "Issue test",
           //   // body: "이슈 생성 테스트중",
           //   title: formData.title,
-          //   body: formData.body,
+          //   body: formData.body,https://korean.visitkorea.or.kr/main/main.do
           // },
           {
             headers: {
@@ -48,7 +50,11 @@ const CreateIssue = () => {
         setTimeout(() => {
           setSuccessMessage("");
           resetForm();
-        }, 3000);
+
+          // 이슈생성 후 전페이지로  이동
+          navigate("/", { replace: true });
+          alert("이슈 생성 페이지로 이동합니다🚀");
+        }, 2000);
       } catch (error) {
         console.error("이슈 생성 실패 ❌", error);
       }
@@ -56,6 +62,12 @@ const CreateIssue = () => {
     onErrors: () => console.warn("유효성 검사 실패 ❌"),
     validate,
     refs: { title: inputRef, body: textareaRef },
+    onSuccess: (result) => {
+      console.log({ result });
+
+      //   // 이슈생성 성공시 전페이지(이슈페이지)로  바로이동
+      //   navigate("/", { replace: true });
+    },
   });
 
   return (

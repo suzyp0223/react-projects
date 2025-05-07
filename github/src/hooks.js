@@ -54,13 +54,15 @@ const useForm = ({
     }
 
     // 유효성 통과
-    try {
-      await onSubmit(inputValues);
-      onSuccess();
-    } catch (error) {
-      console.log("제출 중 오류 발생", error);
-    } finally {
-      setIsSubmitting(false);
+    if (errorKeys.length === 0) {
+      try {
+        const result = await onSubmit(inputValues);
+        onSuccess(result);
+      } catch (error) {
+        console.log("제출 중 오류 발생", error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
 
     // // 이 코드로 인해 onSubmit()이 두번 호출됨.
