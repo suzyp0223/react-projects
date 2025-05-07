@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import cx from "clsx";
 
 import styles from "./CreateIssue.module.css";
@@ -6,26 +6,69 @@ import styles from "./CreateIssue.module.css";
 import Button from "../components/Button";
 import TextField from "../components/TextField";
 import useForm from "../hooks";
+import { GITHUB_API } from "./../api";
+import axios from "axios";
 
 const CreateIssue = () => {
+  const [successMessage, setSuccessMessage] = useState("");
   // form 똑똑하게 다루는 방법: useRef()
   const inputRef = useRef();
   const textareaRef = useRef();
 
-  const { isSubmitting, inputValues, onChange, handleSubmit, errors } = useForm(
-    {
-      initialValues: { title: "", body: "" },
-      onSubmit: () => console.log("완료"),
-      onErrors: () => console.warn("유효성 검사 실패!"),
-      validate,
-      refs: { title: inputRef, body: textareaRef },
+  const {
+    isSubmitting,
+    inputValues,
+    onChange,
+    handleSubmit,
+    errors,
+    resetForm,
+  } = useForm({
+    initialValues: { title: "", body: "" },
+    onSubmit: async (formData) => {
+      // console.log("토큰확인:", process.env.REACT_APP_GITHUB_TOKEN),
+      try {
+        const res = await axios.post(
+          `${GITHUB_API}/repos/suzyp0223/react-projects/issues`,
+          {
+            // title: "Issue test",
+            // body: "이슈 생성 테스트중",
+            title: formData.title,
+            body: formData.body,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        console.log("이슈 생성 성공 ✅", res.data);
+        setSuccessMessage("이슈가 성공적으로 등록되었습니다! 🎉");
+        setTimeout(() => {
+          setSuccessMessage("");
+          resetForm();
+          
+        }, 3000);
+      } catch (error) {
+        console.error("이슈 생성 실패 ❌", error);
+      }
     },
-  );
+    onErrors: () => console.warn("유효성 검사 실패 ❌"),
+    validate,
+    refs: { title: inputRef, body: textareaRef },
+  });
 
   return (
     <div className={styles.container}>
       <div className={styles.avatar}></div>
       <div className={cx(styles.inputWrapper, styles.border)}>
+        {/* !!성공 메시지 출력 */}
+        {successMessage && (
+          <div style={{ color: "green", marginBottom: "10px" }}>
+            {successMessage}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           {/* forwardRef는 input을 사용할수 없는 상황에서 쓰임. 즉 function을 커스텀하게 사용해야할 때.*/}
           {/* <input

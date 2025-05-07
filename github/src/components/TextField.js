@@ -3,11 +3,11 @@ import cx from "clsx";
 
 import styles from "./TextField.module.css";
 
-const TextField = (
+const TextField = forwardRef(function TextField(
   { type = "input", name, placeholder, onChange, value, error },
   ref,
-) => {
-  console.log('error: ', {error});
+) {
+  // console.log('error: ', {error});
   return type === "input" ? (
     <input
       onChange={onChange}
@@ -29,7 +29,7 @@ const TextField = (
       placeholder={placeholder}
     ></textarea>
   );
-};
+});
 
 // 함수형 컴포넌트 새로만들었을때 ref로 감싸서 전달하고 싶으면 이렇게 작성.
-export default forwardRef(TextField);
+export default (TextField);

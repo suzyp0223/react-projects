@@ -7,47 +7,67 @@ import { useState } from "react";
 const useForm = ({
   initialValues,
   validate,
-  refs,
-  onSuccess = () => {}, // 성공했을때 할일?
-  onErrors = () => {}, // 에러가 나면 뭐를 어떻게?
-  onSubmit, // 값이 전달될때는 어떤 함수르 호출?
+  refs = {}, // optional
+  onSuccess = () => {}, // 성공했을때 할일?  // ✅ 기본 빈 함수로 안전하게
+  onErrors = () => {}, // 에러가 나면 뭐를 어떻게?  // ✅ 기본 빈 함수로 안전하게
+  onSubmit = () => {}, // 값이 전달될때는 어떤 함수를 호출? // ✅ 폼 제출 후 호출될 콜백
 }) => {
   const [inputValues, setInputValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
 
-  //여러번 submit 버튼 클릭되는걸 방지하는 스테이트
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // submit 중복 제출 방지
 
-  const onChange = (e) => {
+  const resetForm = () => {
+    setInputValues(initialValues);
+
+    if (refs?.title?.current) {
+      refs.title.current.focus();
+    }
+  };
+
+  const onChange = async (e) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     setIsSubmitting(true);
-    const validateResult = validate(inputValues);
-    setErrors(validateResult);
 
-    // const refs = { title: inputRef, body: textareaRef };
-    const errorKeys = Object.keys(validateResult); //[]
+    const validationResult = validate(inputValues);
+    setErrors(validationResult);
+    const errorKeys = Object.keys(validationResult);
 
-    if (errorKeys.length !== 0) {
-      const key = errorKeys[0];
-      alert(validateResult[key]);
-      onErrors();
-      refs[key].current.focus();
+    if (errorKeys.length > 0) {
+      const firstErrorKey = errorKeys[0];
+      alert(validationResult[firstErrorKey]);
+      if (refs[firstErrorKey]?.current) {
+        refs[firstErrorKey].current.focus();
+      }
 
+      onErrors(validationResult);
       //ref control
       setIsSubmitting(false);
       return;
     }
 
-    if (errorKeys.length === 0) {
-      onSubmit();
-      return;
+    // 유효성 통과
+    try {
+      await onSubmit(inputValues);
+      onSuccess();
+    } catch (error) {
+      console.log("제출 중 오류 발생", error);
+    } finally {
+      setIsSubmitting(false);
     }
+
+    // // 이 코드로 인해 onSubmit()이 두번 호출됨.
+    // if (errorKeys.length === 0) {
+    //   await onSubmit();
+    //   return;
+    // }
 
     // if (e.target.elements.title.value === "") {
     //   alert("타이틀을 입력해주세요");
@@ -59,7 +79,14 @@ const useForm = ({
     // console.log("제출된 데이터:", data);
   };
 
-  return { inputValues, onChange, isSubmitting, errors, handleSubmit };
+  return {
+    inputValues,
+    onChange,
+    isSubmitting,
+    errors,
+    handleSubmit,
+    resetForm,
+  };
 };
 
 export default useForm;
