@@ -29,5 +29,19 @@
 .description {
   color: rbg(87, 96, 106);
   font-size: 12px;
+}
 
+.listItemInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.leftContent {
+  flex: 1;
+}
+
+.rightContent {
+  margin-left: 300px;
 }

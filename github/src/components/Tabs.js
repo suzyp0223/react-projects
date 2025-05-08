@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 // url의 pathname을 받아오는 훅: useLocation
 // history api를 통해서 브라우저 경로만 바꾸는 컴포넌트: Link(a태그를 내부적으로 사용)
