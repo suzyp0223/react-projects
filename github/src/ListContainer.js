@@ -54,23 +54,28 @@ const ListContainer = () => {
 
   // pageParam: getData할때 page스테이트를 외부에서 받음 useEffect에서 page를 인자로 받아야함.
   // ✅ GitHub 이슈 목록 가져오기 함수
-  async function getData(params) {
-    console.log("📡 getData 호출됨 with params:", params); // ✅ 추가
+  async function getData(params, forceRefresh = false) {
+    // async function getData(params) {
+    // console.log("📡 getData 호출됨 with params:", params); // ✅ 추가
 
     const query = new URLSearchParams(params); //❗❗객체를 쿼리스트링처럼 다룸
-    // // 🔄 캐시 방지
-    // query.set("t", Date.now());
 
     /*🏷️
-    오류상황- 이슈닫기를 누르면 무반응(작업중인 리스트는 그대로 깃헙은 이슈닫기됨)
-    => query.set("state", "open") 코드 추가후 파라미터 강제 유지,
-    이유3 코드 추가후 getDate()가 최신 리스트로 덮어씌어짐.
-    🏷️오류가 해결된 이유1.
-      ❗❗쿼리 파라미터가 ?state=open이 아닌 경우 GitHub API는 닫힌 이슈도 함께 보내줍니다.
-      ❗❗기본값을 open으로 지정하여 리스트가 닫힌 이슈 없이 유지되도록 했습니다.
-    */
+        오류상황- 이슈닫기를 누르면 무반응(작업중인 리스트는 그대로 깃헙은 이슈닫기됨)
+        => query.set("state", "open") 코드 추가후 파라미터 강제 유지,
+        이유3 코드 추가후 getDate()가 최신 리스트로 덮어씌어짐.
+        🏷️오류가 해결된 이유1.
+          ❗❗쿼리 파라미터가 ?state=open이 아닌 경우 GitHub API는 닫힌 이슈도 함께 보내줍니다.
+          ❗❗기본값을 open으로 지정하여 리스트가 닫힌 이슈 없이 유지되도록 했습니다.
+        */
     if (!query.has("state")) query.set("state", "open"); // 🔒 state 값 기본값 강제 설정❗❗
-    console.log("📡 getData 호출됨 with params:", query.toString());
+    // console.log("📡 getData 호출됨 with params:", query.toString());
+
+    // 🔄 캐시 우회용 타임스탬프 파라미터 (옵션)
+    // ❗ 조건부로만 캐시 방지 쿼리 추가
+    if (forceRefresh) {
+      query.set("t", Date.now()); // 캐시 무효화
+    }
 
     const { data } = await axios.get(
       // `${GITHUB_API}/repos/facebook/react/issues`,
@@ -93,10 +98,10 @@ const ListContainer = () => {
       },
     );
 
-    console.log(
-      "📦 받아온 이슈 리스트:",
-      data.map((d) => [d.number, d.state]),
-    );
+    // console.log(
+    //   "📦 받아온 이슈 리스트:",
+    //   data.map((d) => [d.number, d.state]),
+    // );
 
     // console.log("📦 최신 리스트 데이터:", data); // 👈 여기 확인!
     //❗❗ 받은 이슈 중에서 open인 것만 화면에 보여줌
@@ -125,6 +130,7 @@ const ListContainer = () => {
       setSearchParams(newParams); //❗❗변경 시 자동으로  getData트리거
       return;
     }
+    // getData(searchParams, true);
     getData(searchParams);
   }, [searchParams]);
 
@@ -236,14 +242,14 @@ const ListContainer = () => {
                   {item.state === "open" && (
                     <CloseIssue
                       issueNumber={item.number}
-                      onSuccess={
-                        () => {
+                      // ✅ 리스트 새로고침
+                      onSuccess={() => {
+                        setTimeout(() => {
                           const newParams = new URLSearchParams(searchParams);
                           newParams.set("state", "open"); //❗❗ 상태 유지
-                          getData(newParams); //❗❗ 이슈 닫은 후 리스트 갱신
-                        }
-                        // getData(searchParams) // 🔁 리스트 즉시 갱신
-                      } // ✅ 리스트 새로고침
+                          getData(newParams, true); // delay 추가
+                        }, 300); // 0.3초 지연 후 호출
+                      }}
                     />
                   )}
                 </ListItem>
