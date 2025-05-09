@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -9,7 +9,8 @@ import Button from "../components/Button";
 import TextField from "../components/TextField";
 import useForm from "../hooks";
 import { GITHUB_API } from "./../api";
-
+import UserContext from "../context/UserContext";
+import { useUser } from "../hooks";
 
 const CreateIssue = () => {
   const [successMessage, setSuccessMessage] = useState("");
@@ -17,13 +18,18 @@ const CreateIssue = () => {
   const inputRef = useRef();
   const textareaRef = useRef();
   const navigate = useNavigate();
+  // const data = useContext(UserContext); // user라는 값을 context에 담아서 가져옴. app.js에서 provider 에 담은 user값.
+  // console.log("data: ", { data });
+  const user = useUser();  // user값을 계속 보내지 않기 위해 캐시사용.
+  // 캐시 - 쉽게 변하지 않는 데이터를 임시적으로 저장해두는 부분.
+  // console.log('{user}: ', {user});
 
   const {
     isSubmitting,
     inputValues,
     onChange,
-    handleSubmit,
     errors,
+    handleSubmit,
     resetForm,
   } = useForm({
     initialValues: { title: "", body: "" },
@@ -40,7 +46,6 @@ const CreateIssue = () => {
           //   body: formData.body,https://korean.visitkorea.or.kr/main/main.do
           // },
           {
-            
             headers: {
               Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
               "Content-Type": "application/json",
