@@ -3,7 +3,7 @@
 
 */
 import { useState } from "react";
-import { useEffect } from "react";
+import { useQuery } from "react-query";
 import { GITHUB_API } from "./api";
 import axios from "axios";
 
@@ -96,25 +96,29 @@ const useForm = ({
 
 export default useForm;
 
+async function getUserInfo() {
+  const data = await axios.get(`${GITHUB_API}/user`, {
+    headers: {
+      Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  });
 
+  return data.data;
+}
 
 export const useUser = () => {
-  const [user, setUser] = useState();
+  /* useUser 개선이유
+    1. user 정보는 매번 바뀌지 않는다.
+    2. 그럼에도, useUser 사용할때마다 네트워크 콜이 일어난다.
+  */
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  async function getUserInfo() {
-    const data = await axios.get(`${GITHUB_API}/user`, {
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
-        "Context-Type": "application/json",
-      },
-    });
-
-    setUser(data.data);
-  }
-  
-  return user;
+  return useQuery(["userInfo"], () => getUserInfo(), {
+    staleTime: "Infinity",
+  });
 };
+
+/**
+ * userInfo  라는 쿼리키로 캐싱 -> fetch -> stale -> 인스턴스 unmount
+ *
+ */

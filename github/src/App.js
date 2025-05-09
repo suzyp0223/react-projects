@@ -1,7 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-import axios from "axios";
 
 import Nav from "./components/Nav";
 import Header from "./Header";
@@ -12,6 +9,9 @@ import PullRequest from "./pages/PullRequest";
 import Code from "./pages/Code";
 import Security from "./pages/Security";
 import Actions from "./pages/Actions";
+import { QueryClientProvider, QueryClient } from "react-query";
+
+const queryClient = new QueryClient();
 
 /**
  * Context API - 전역적인 정보 prop drilling 없이 사용할때
@@ -21,8 +21,8 @@ import Actions from "./pages/Actions";
  */
 function App() {
   return (
-    // <UserContext.Provider>
-    <>
+    // <UserContext.Provider> // 이렇게 사용해도 되지만 hook.js에 useUser훅으로 분리함.
+    <QueryClientProvider client={queryClient}>
       <Nav />
       <Header />
       <Routes>
@@ -35,7 +35,7 @@ function App() {
         <Route path="/security" element={<Security />} />
         <Route path="/actions" element={<Actions />} />
       </Routes>
-    </>
+    </QueryClientProvider>
     // </UserContext.Provider>
   );
 }
