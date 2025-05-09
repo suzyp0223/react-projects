@@ -1,0 +1,91 @@
+{
+  "name": "typewithoutcra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production",
+    "prestart": "npm build",
+    "start": "webpack --mode development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/react": "^19.1.3",
+    "@types/react-dom": "^19.1.3",
+    "babel-loader": "^10.0.0",
+    "html-webpack-plugin": "^5.6.3",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  }
+}
+
+
+
+// ⌨️http-server 사용 build된 정적파일(dist폴더)을 로컬에서 직접 확인하는 방법
+📦설치
+npm install --global http-server
+npm install -g live-server
+
+▶️실행
+http-server dist
+live-server dist
+
+🌐 브라우저에서 보기
+http://localhost:8080 (기본 포트)
+  http://127.0.0.1:8081-내 컴
+→ dist/index.html이 열립니다.
+
+👀👓🥽watch모드 설정- 코드를 수정할 때마다 자동 빌드(배포용 빌드 파일을 실시간으로 만듬.)
+📦 package.json에 스크립트 추가
+"scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production",
+  "watch": "webpack --watch --mode production"
+}
+
+▶️ 실행
+npm run watch
+
+
+
+
+// ✅ 원클릭 실행 스크립트
+npm run watch와 live-server dist를 동시에 실행
+
+📦 Step 1: npm-run-all 설치
+npm install --save-dev npm-run-all
+
+📝 Step 2: package.json 스크립트 추가
+"scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production",
+  "watch": "webpack --watch --mode production",
+  "serve": "live-server dist --port=3030",
+  "dev:static": "npm-run-all --parallel watch serve"
+}
+
+▶️ Step 3: 실행
+npm run dev:static
+
+🌐 브라우저에서 보기
+http://localhost:3030
+
+이제 한 번의 명령어로:
+코드 수정 시 자동으로 빌드되고 (watch)
+live-server로 브라우저도 자동 열립니다.
