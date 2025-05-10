@@ -4,7 +4,7 @@ const App = () => {
 
   return (
     <>
-      init React TypeScript
+      Init React TypeScript
 
     </>
   );

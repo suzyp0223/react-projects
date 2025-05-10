@@ -30,9 +30,12 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
     clean: true, // 이전 빌드 결과 삭제
+  },
+  optimization: {
+    minimize: false,
   },
 
   plugins: [
@@ -42,7 +45,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html", // public 폴더 안에 있는 HTML 템플릿
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin(), // webpack dev서버
   ],
   devServer: {
     historyApiFallback: true, // SPA 라우팅 지원
@@ -51,7 +54,9 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "dist"),
     },
-
+    proxy: {
+      "/api": "domain.com",
+    },
     open: true, //개발 서버 실행 시 브라우저가 자동으로 열림.
   },
 };
