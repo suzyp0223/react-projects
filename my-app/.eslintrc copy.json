@@ -1,0 +1,78 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2020": true,
+    "jest": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint", "react", "prettier"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier"
+  ],
+  "ignorePatterns": ["*.css"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "object-curly-newline": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "lf"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [".tsx", ".jsx"]
+      }
+    ],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/prop-types": "off",
+    "react/button-has-type": "warn",
+    "react/jsx-fragments": ["error", "syntax"],
+    "max-len": ["warn", { "code": 80 }],
+    "quotes": ["error", "single"],
+    "jsx-quotes": ["error", "prefer-single"],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      { "js": "never", "jsx": "never", "ts": "never", "tsx": "never" }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": false,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "arrow-body-style": "off",
+    "react/jsx-no-useless-fragment": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": "./tsconfig.json"
+      }
+    }
+  }
+}

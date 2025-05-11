@@ -1,0 +1,23 @@
+# 최상위 설정 파일임을 선언
+root = true
+
+# 모든 파일 공통 설정
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 마크다운은 공백 유지
+[*.md]
+trim_trailing_whitespace = false
+
+# JSON 파일은 indent_size를 2로 고정
+[*.json]
+indent_size = 2
+
+# node_modules 무시
+[**/node_modules/**]
+end_of_line = unset
