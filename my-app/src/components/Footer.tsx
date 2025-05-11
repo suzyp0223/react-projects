@@ -51,7 +51,7 @@ const footerItems = [
   },
 ];
 
-const Footer = () => {
+function Footer() {
   return (
     <ul className={styles.footer}>
       {footerItems.map(({ link, title }) => (
@@ -63,6 +63,6 @@ const Footer = () => {
       ))}
     </ul>
   );
-};
+}
 
 export default Footer;

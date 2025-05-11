@@ -7,7 +7,7 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2020,
+    "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -19,69 +19,49 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "airbnb",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
-  "ignorePatterns": ["*.css"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "object-curly-newline": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/jsx-wrap-multilines": "warn",
+    "react/jsx-filename-extension": [
+      "warn",
+      { "extensions": ["ts", ".tsx", "js", ".jsx"] }
+    ],
     "prettier/prettier": [
       "error",
       {
-        "printWidth": 120,
-        "tabWidth": 2,
-        "arrowParens": "always",
-        "trailingComma": "all",
-        "endOfLine": "lf",
-        "useTabs": false,
-        "quoteProps": "consistent",
-        "bracketSpacing": true,
-        "proseWrap": "always",
-        "htmlWhitespaceSensitivity": "css",
-        "bracketSameLine": false,
         "singleQuote": true,
         "jsxSingleQuote": true,
-        "semi": true
+        "semi": true,
+        "trailingComma": "all"
       }
     ],
-    "react/jsx-filename-extension": [
-      "warn",
-      {
-        "extensions": [".tsx", ".jsx"]
-      }
-    ],
-    "react/function-component-definition": [
+    "import/no-unresolved": "off",
+    "import/extensions": [
       "error",
+      "ignorePackages",
       {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
       }
-    ],
-    "react/jsx-fragments": ["error", "syntax"],
-    "max-len": ["warn", { "code": 120 }],
-    "quotes": ["error", "single"],
-    "jsx-quotes": ["error", "prefer-single"],
-    "import/extensions": ["error", "ignorePackages", { "ts": "never", "tsx": "never" }],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": false,
-        "optionalDependencies": false,
-        "peerDependencies": false
-      }
-    ],
-    "arrow-body-style": "off",
-    "react/jsx-no-useless-fragment": "off"
+    ]
   },
   "settings": {
     "react": {
       "version": "detect"
     },
-    "node": {
-      "paths": ["src"]
-    },
     "import/resolver": {
-      "typescript": {}
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./tsconfig.json"
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   }
 }
