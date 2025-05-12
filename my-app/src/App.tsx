@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import Nav from './components/Nav';
 import Issue from './pages/Issue';
-import Header from './components/Header';
+import Header from './Header';
 /**
  * Context API - 전역적인 정보 prop drilling 없이 사용할때
  * -> 굳이 사용하지 않아도 된다면,

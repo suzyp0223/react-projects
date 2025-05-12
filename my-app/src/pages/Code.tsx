@@ -1,5 +1,5 @@
-const Code = () => {
+function Code() {
   return <>Code</>;
-};
+}
 
 export default Code;

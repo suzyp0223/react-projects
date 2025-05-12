@@ -5,8 +5,7 @@ import 'dayjs/locale/ko'; // 한국어 locale 가져오기
 import React from 'react';
 import styles from './ListItem.module.css';
 
-import ListItemLayout from './ListItemLayout';
-import Badge from './Badge';
+import { ListItemData } from '../model/issues';
 
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
@@ -15,15 +14,7 @@ interface ListItemProps {
   checked: boolean;
   // onClickCheckBox,
   onClickTitle?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  data: {
-    state: string;
-    created_at: string;
-    closed_at: string;
-    title: string;
-    number: number;
-    user: { login: string };
-    labels: object[];
-  };
+  data: ListItemData;
   children?: React.ReactNode;
   className?: string;
   onChangeCheckBox: () => void;

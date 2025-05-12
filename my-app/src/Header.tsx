@@ -1,7 +1,7 @@
 import styles from './Header.module.css';
-import Button from './Button';
-import Space from './Space';
-import Tabs from './Tabs';
+import Button from './components/Button';
+import Space from './components/Space';
+import Tabs from './components/Tabs';
 
 export default function Header() {
   return (

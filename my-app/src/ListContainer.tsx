@@ -14,10 +14,11 @@ import Pagination from './components/Pagination';
 import ListFilter from './components/ListFilter';
 import CloseIssue from './pages/CloseIssue';
 import { GITHUB_API } from './api';
+import { ListItemData } from './model/issues';
 
 interface IssueData {
   id: number;
-  state: string;
+  state: 'open' | 'close';
   created_at: string;
   closed_at: string;
   title: string;
@@ -30,7 +31,7 @@ function ListContainer() {
   // 리액트에서 input을 다룰땐 useState로 많이 다룸.
   const [inputValue, setInputValue] = useState('is:pr is:open'); // ❗❗ 검색창 value
   const [checked, setChecked] = useState(false); // ❗❗체크박스 상태
-  const [list, setList] = useState<IssueData[]>([]); /* data */ // ❗❗이슈 리스트 상태
+  const [list, setList] = useState<ListItemData[]>([]); /* data */ // ❗❗이슈 리스트 상태
 
   const maxPage = 10; // ❗❗페이지네이션 최대 페이지
   const [searchParams, setSearchParams] = useSearchParams(); // ❗❗ URL 쿼리스트링 상태 관리 훅
