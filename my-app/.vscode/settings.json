@@ -10,5 +10,7 @@
   "prettier.semi": true,
   "prettier.tabWidth": 2,
   "prettier.trailingComma": "all",
-  "prettier.arrayBracketNewline": true
+  "prettier.arrayBracketNewline": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.workingDirectories": ["./"]
 }

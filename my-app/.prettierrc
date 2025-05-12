@@ -12,6 +12,5 @@
   "semi": true,
   "bracketSameLine": false,
   "singleQuote": true,
-  "jsxSingleQuote": true,
-  "arrayBracketNewline": true
+  "jsxSingleQuote": true
 }

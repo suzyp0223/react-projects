@@ -1,17 +1,18 @@
 import React from 'react';
 import styles from './Button.module.css';
 
-// type Props = {
+// type ButtonProps = {
 //   style: React.CSSProperties;
 //   children: React.ReactElement;
 //   type: 'button' | 'submit';
 //   disabled: boolean;
 // };
-interface Props {
+interface ButtonProps {
   style: React.CSSProperties;
-  children: React.ReactElement;
-  type: 'button' | 'submit';
-  disabled: boolean;
+  children: React.ReactNode;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
 function Button({
@@ -20,7 +21,7 @@ function Button({
   type = 'button',
   disabled,
   onClick,
-}: Props) {
+}: ButtonProps) {
   return (
     <button
       className={styles.button}
