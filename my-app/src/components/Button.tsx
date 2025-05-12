@@ -1,6 +1,26 @@
+import React from 'react';
 import styles from './Button.module.css';
 
-function Button({ style, children, type = 'button', disabled, onClick }) {
+// type Props = {
+//   style: React.CSSProperties;
+//   children: React.ReactElement;
+//   type: 'button' | 'submit';
+//   disabled: boolean;
+// };
+interface Props {
+  style: React.CSSProperties;
+  children: React.ReactElement;
+  type: 'button' | 'submit';
+  disabled: boolean;
+}
+
+function Button({
+  style,
+  children,
+  type = 'button',
+  disabled,
+  onClick,
+}: Props) {
   return (
     <button
       className={styles.button}
