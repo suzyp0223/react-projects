@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import cx from 'clsx';
 import styles from './ListFilter.module.css';
+import { STATE } from '../model/issues';
 
 interface OpenClosedFilterProps {
   state: string;

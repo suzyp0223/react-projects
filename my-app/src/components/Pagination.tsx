@@ -1,9 +1,8 @@
 import cx from 'clsx';
-import React from 'react';
 import styles from './Pagination.module.css';
 
 interface OnClickProps {
-  onClick: (page: number) => void;
+  onClickPageButton: (page: number) => void;
 }
 
 interface PageButtonProps extends OnClickProps {
@@ -13,12 +12,12 @@ interface PageButtonProps extends OnClickProps {
 }
 // 페이지네이션 안 버튼
 // onClick을 밖에서 받아야 커스터마이징이 가능.
-function PageButton({ number, selected, onClick }: PageButtonProps) {
+function PageButton({ number, selected, onClickPageButton }: PageButtonProps) {
   return (
     <button
       type='button'
       className={cx(styles.button, { [styles.selected]: selected })}
-      onClick={() => onClick(number)}
+      onClick={() => onClickPageButton(number)}
     >
       {number}
     </button>
@@ -32,7 +31,11 @@ interface PaginationProps extends OnClickProps {
 }
 
 // 현재어떤 페이지를 보고있는지-currentPage, 최대페이지-maxPage
-function Pagination({ maxPage, currentPage, onClick }: PaginationProps) {
+function Pagination({
+  maxPage,
+  currentPage,
+  onClickPageButton,
+}: PaginationProps) {
   return (
     <div>
       <button
@@ -49,7 +52,7 @@ function Pagination({ maxPage, currentPage, onClick }: PaginationProps) {
           <PageButton
             key={`page-${number}`}
             number={number}
-            onClick={onClick}
+            onClickPageButton={onClickPageButton}
             selected={number === currentPage}
           />
         );

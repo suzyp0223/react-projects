@@ -1,8 +1,7 @@
 // 매개변수color를 클래스 네임으로 쓰기위해 clsx를 추가
-import cx from 'clsx';
 import styles from './Badge.module.css';
 
-interface BadgeProps {
+export interface BadgeProps {
   color: string;
   name: string;
 }

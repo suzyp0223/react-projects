@@ -15,9 +15,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "src",
-    "paths": {
-      "~/*": ["./*"]
-    },
     "typeRoots": ["node_modules/@types", "src/types"] // ✅ 추가된 부분
   },
   "include": ["src"]

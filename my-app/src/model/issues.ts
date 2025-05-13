@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+import { BadgeProps } from '../components/Badge';
+
 export interface DataItem {
   name: any;
   color: any;
@@ -13,6 +16,17 @@ export interface Data {
 
 export type List = Partial<DataItem> & { name?: string };
 
+export const enum STATE {
+  OPEN = 'open',
+  CLOSE = 'close',
+}
+
+// union type
+export const STATEUnion = {
+  OPENED: 'opened',
+  CLOSED: 'closed',
+} as const;
+
 export interface ListItemData {
   id: string;
   state: 'open' | 'close';
@@ -21,5 +35,5 @@ export interface ListItemData {
   title: string;
   number: number;
   user: { login: string };
-  labels: object[];
+  labels: BadgeProps[];
 }

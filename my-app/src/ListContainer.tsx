@@ -14,11 +14,11 @@ import Pagination from './components/Pagination';
 import ListFilter from './components/ListFilter';
 import CloseIssue from './pages/CloseIssue';
 import { GITHUB_API } from './api';
-import { ListItemData } from './model/issues';
+import { ListItemData, STATE } from './model/issues';
 
 interface IssueData {
   id: number;
-  state: 'open' | 'close';
+  state: STATE.OPEN | STATE.CLOSE;
   created_at: string;
   closed_at: string;
   title: string;
@@ -156,7 +156,7 @@ function ListContainer() {
                   data={item}
                   key={item.id}
                   checked={checked}
-                  onChangeCheckBox={() => setChecked((prev) => !prev)}
+                  onClickCheckBox={() => setChecked((prev) => !prev)}
                 >
                   {/* ❗❗열려있는 이슈일 경우만 Close 버튼 노출 */}
                   {item.state === 'open' && (
@@ -182,7 +182,7 @@ function ListContainer() {
         <Pagination
           maxPage={maxPage}
           currentPage={page}
-          onClick={(PageNumber) =>
+          onClickPageButton={(PageNumber) =>
             setSearchParams({ page: PageNumber.toString() })
           }
         />

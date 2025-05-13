@@ -4,7 +4,7 @@ import styles from './ListItemLayout.module.css';
 
 interface ListItemLayoutProps {
   children?: React.ReactNode;
-  className: string;
+  className?: string;
   checked?: boolean;
   onClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
