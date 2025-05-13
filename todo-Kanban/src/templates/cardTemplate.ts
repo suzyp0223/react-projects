@@ -1,4 +1,4 @@
-export default function cardTemplate() {
+export function cardTemplate() {
 return `
     <div class="todo-item add-item">
       <div>

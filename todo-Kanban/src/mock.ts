@@ -1,21 +1,21 @@
-import { TodoList, DoneTodo, inProgressTodo } from "./type";
+import { TodoList, DoneTodo, InProgressTodo } from "./type";
 
-export const todoList: inProgressTodo[] = [
+export const todoList: InProgressTodo[] = [
   {
-    id: '0',
+    id: "0",
     content: { title: "제목", body: "내용" },
     isDone: false,
     category: "to-do",
-    tags: [{ id: '0', content: "태그1" }],
+    tags: [{ id: "0", content: "태그1" }],
   },
 ];
-export const inProgressList: inProgressTodo[] = [
+export const inProgressList: InProgressTodo[] = [
   {
-    id: '0',
+    id: "0",
     content: { title: "제목", body: "내용" },
     isDone: false,
     category: "in-progress",
-    tags: [{ id: '0', content: "태그1" }],
+    tags: [{ id: "0", content: "태그1" }],
   },
 ];
 export const doneList: DoneTodo[] = [

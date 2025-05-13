@@ -1,18 +1,22 @@
+type Content = {
+  title: string;
+  body: string;
+};
+
+export type Tag = {
+  id: string;
+  content: string;
+};
+
 export interface Todo {
   id: string;
-  content: {
-    title: string;
-    body: string;
-  };
+  content: Content;
   isDone: boolean;
   category: string;
-  tags: {
-    id: string;
-    content: string;
-  }[];
+  tags?: Tag[];
 }
 
-export interface inProgressTodo extends Todo {
+export interface InProgressTodo extends Todo {
   isDone: false;
 }
 export interface DoneTodo extends Todo {
@@ -22,5 +26,11 @@ export interface DoneTodo extends Todo {
 export interface TodoList {
   id: string;
   title: string;
-  list: Todo[]
+  list: Todo[];
+}
+
+export function isButtonElement(
+  targetElement: HTMLElement | EventTarget
+): targetElement is HTMLButtonElement {
+  return targetElement && targetElement instanceof HTMLButtonElement;
 }

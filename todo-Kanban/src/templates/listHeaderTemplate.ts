@@ -1,6 +1,6 @@
 import { TodoList} from '../type';
 
-const listHeaderTemplate = ({ list, title, id }: TodoList) => {
+export function listHeaderTemplate  ({ list, title, id }: TodoList)  {
   return `
   <section class="board-title">
     <div class="board-header">
@@ -14,5 +14,3 @@ const listHeaderTemplate = ({ list, title, id }: TodoList) => {
   </section>
   `;
 };
-
-export default listHeaderTemplate;

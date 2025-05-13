@@ -2,20 +2,29 @@ import "./style.css";
 
 import { v4 as uuidv4 } from "uuid";
 import { defaultKanban } from "./mock";
-import { Todo, TodoList } from "./type";
-import cardTemplate from "./templates/cardTemplate";
-import addListButtonTemplate from "./templates/addListButtonTemplate";
-import listTemplate from "./templates/listTemplate";
-import listHeaderTemplate from "./templates/listHeaderTemplate";
+
+import {
+  addListButtonTemplate,
+  cardTemplate,
+  listContainerTemplate,
+  listHeaderTemplate,
+} from "./templates";
+
+import {
+  InProgressTodo,
+  isButtonElement,
+  Tag,
+  type Todo,
+  type TodoList,
+} from "./type";
 
 class KanbanApp {
-  list: TodoList[];
+  kanban: TodoList[];
 
   constructor(data: TodoList[]) {
-    this.list = data;
+    this.kanban = data;
 
-    this.render();
-    this.attachEvent();
+    this.mount();
   }
 
   render() {
@@ -35,9 +44,9 @@ class KanbanApp {
       // fragment를 appendChild() 또는 append()를 사용해 실제 DOM에 추가하면,
       // fragment 자체는 사라지고 내부의 요소들만 남음.
       const fragment = document.createDocumentFragment();
-      const listElements = this.list.map((list) => this.generateList(list));
+      const kanbanElements = this.kanban.map((todo) => this.generateList(todo));
 
-      fragment.append(...listElements);
+      fragment.append(...kanbanElements);
       board.append(fragment, addListButton);
     }
   }
@@ -54,8 +63,8 @@ class KanbanApp {
     $addListButton?.addEventListener("click", () => {
       const newId = uuidv4();
 
-      this.list = [
-        ...this.list,
+      this.kanban = [
+        ...this.kanban,
         {
           id: newId,
           title: `kanban-${newId}`,
@@ -63,7 +72,7 @@ class KanbanApp {
         },
       ];
 
-      this.render();
+      this.mount();
     });
 
     $removeListButton?.forEach((button) => {
@@ -78,7 +87,7 @@ class KanbanApp {
 
     $addTodoButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (currentTarget instanceof HTMLButtonElement) {
+        if (currentTarget && isButtonElement(currentTarget)) {
           const [, category] = currentTarget.id.split("add-todo-");
 
           // Todo 추가시 InProgress,Done에도 똑같이 추가
@@ -90,7 +99,7 @@ class KanbanApp {
 
     $removeTodoButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (currentTarget && currentTarget instanceof HTMLButtonElement) {
+        if (currentTarget && isButtonElement(currentTarget)) {
           const category = currentTarget?.closest(".todo")?.id.split("+")[0];
           const [, selectedId] = currentTarget.id.split("delete-todo-");
 
@@ -101,83 +110,49 @@ class KanbanApp {
 
     $addTagButton.forEach((button) => {
       button.addEventListener("click", ({ currentTarget }) => {
-        if (!(currentTarget instanceof HTMLButtonElement)) {
-          return;
+        if (currentTarget && isButtonElement(currentTarget)) {
+          const category = currentTarget.closest(".todo")?.id.split("+")[0];
+          const selectedId = currentTarget.id.split("todo-")[1];
+
+          const tagContent =
+            currentTarget.closest(".tag")?.querySelector("span")?.textContent ??
+            ""; // ?? '' 뜻: 없으면 빈문자열
+
+          this.addTag({ category, selectedId, tagContent });
         }
-
-        const category = currentTarget.closest(".todo")?.id.split("+")[0];
-        const selectedId = currentTarget.id.split("todo-")[1];
-
-        const listId = this.list.findIndex((list) => list.title === category);
-        const targetList = this.list.find((list) => list.title === category);
-
-        const todo = targetList?.list.find((todo) => todo.id === selectedId);
-        const todoIndex = targetList?.list.findIndex(
-          (todo) => todo.id === selectedId
-        );
-
-        const tagContent = currentTarget
-          .closest(".tag")
-          ?.querySelector("span")?.textContent;
-
-        todo?.tags?.push({
-          id: uuidv4(),
-          content: tagContent ?? "태그",
-        });
-
-        if (todoIndex && todo) {
-          this.list[listId].list.splice(todoIndex, 1, todo);
-        }
-
-        this.render();
-        this.attachEvent();
       });
     });
 
     $removeTagButton.forEach((button) => {
       button.addEventListener("click", (event) => {
         const currentTarget = event.currentTarget as HTMLButtonElement;
-        console.log("🟢 태그삭제버튼 클릭2");
 
-        // ✅ tagId 추출: id="todo-delete-${abc}" → "abc"
-        const tagId = currentTarget.id.replace("todo-delete-", "");
+        if (currentTarget && isButtonElement(currentTarget)) {
+          // ✅ category 추출: 가장 가까운 .todo의 id="InProgress+xxx"
+          const category = currentTarget.closest(".todo")?.id.split("+")[0];
 
-        // ✅ todoId 추출: 부모 .tag의 span(id="tag-${todoId}")
-        const parentTagEl = currentTarget.closest(".tag");
-        const todoId = parentTagEl?.id.replace("tag-", "");
+          // 삭제될 TodoId
+          const selectedTodoId = currentTarget
+            .closest(".tag")
+            ?.id.split("tag-")[1];
+          const [, selectedTagId] = currentTarget.id.split("todo-delete-");
 
-        // ✅ category 추출: 가장 가까운 .todo의 id="InProgress+xxx"
-        const category = currentTarget.closest(".todo")?.id.split("+")[0];
-
-        if (!category || !todoId || !tagId) {
-          console.warn("값 추출 실패", { category, todoId, tagId });
-          return;
+          if (!category || !selectedTodoId || !selectedTagId) {
+            console.warn("❗ 추출 실패", {
+              category,
+              selectedTodoId,
+              selectedTagId,
+            });
+            return;
+          }
+          this.removeTag({ category, selectedTagId, selectedTodoId });
         }
-
-        // ✅ 해당 todo 찾아서 tag 삭제
-        const listIndex = this.list.findIndex(
-          (list) => list.title === category
-        );
-        const targetList = this.list[listIndex];
-        const todoIndex = targetList.list.findIndex(
-          (todo) => todo.id === todoId
-        );
-        const todo = targetList.list[todoIndex];
-
-        if (todo) {
-          todo.tags = todo.tags.filter((tag) => tag.id !== tagId);
-          this.list[listIndex].list.splice(todoIndex, 1, todo);
-        }
-
-        // ✅  UI 재렌더링 및 이벤트 재연결
-        this.render();
-        this.attachEvent(); // ✅ 이벤트 재연결 필수
       });
     });
   }
 
   // 카테고리받고 거기에 맞는 돔을 만들어 반환
-  addTodo(category: string) {
+  addTodo(category: Todo["category"]) {
     // console.log('category: ', category);
     const $list = document.createElement("section");
     $list.classList.add("todo");
@@ -188,16 +163,16 @@ class KanbanApp {
     $list
       .querySelector(".add")
       ?.addEventListener("click", ({ currentTarget }) => {
-        const listId = this.list.findIndex(({ title }) => title === category);
+        const listId = this.kanban.findIndex(({ title }) => title === category);
 
-        if (currentTarget && currentTarget instanceof HTMLButtonElement) {
+        if (currentTarget && isButtonElement(currentTarget)) {
           const $todo = currentTarget.closest(".todo-item");
           const title = $todo?.querySelector(".add-title")?.textContent;
           const body = $todo?.querySelector(".add-content")?.textContent;
 
           // const newTodoId = this.list?[listId].list.length > 0 ? uuidv4() : 0;
 
-          const newTodo: Todo = {
+          const newTodo: InProgressTodo = {
             id: uuidv4(),
             content: {
               title: title ?? "", // 기존에 있으면 그대로 사용하고 없으면 우항값을 사용 - 널 병합 연산자
@@ -208,35 +183,91 @@ class KanbanApp {
             tags: [],
           };
 
-          const todos = [...this.list[listId].list, newTodo];
-          this.list[listId].list = todos;
-
-          this.render();
+          this.kanban[listId].list = [...this.kanban[listId].list, newTodo];
+          this.mount();
         }
       });
     return $list;
   }
 
   // category: string = '' 없으면 빈값으로 처리
-  removeTodo(selectedId: string, category: string = "") {
+  removeTodo(selectedId: Todo["id"], category: Todo["category"] = "") {
     //listId- 어떤 리스트에서 지우는지 알아야함
-    const listId = this.list.findIndex((list) => list.title === category);
-    const targetList = this.list.find((list) => list.title === category);
+    const listId = this.kanban.findIndex((list) => list.title === category);
+    const targetList = this.kanban.find((list) => list.title === category);
 
     if (targetList) {
-      this.list[listId].list = targetList.list.filter(
+      this.kanban[listId].list = targetList.list.filter(
         (todo) => todo.id !== selectedId
       );
 
-      this.render(); // 변경된 리스트 상태를 화면에 반영
+      this.mount(); // 변경된 리스트 상태를 화면에 반영
     }
   }
 
-  removeList(selectedId: string) {
-    this.list = this.list.filter((list) => list.id !== selectedId);
-    this.render();
+  removeList(selectedId: Todo["id"]) {
+    this.kanban = this.kanban.filter((list) => list.id !== selectedId);
+    this.mount();
   }
 
+  addTag({
+    category,
+    selectedId,
+    tagContent,
+  }: {
+    category?: Todo["category"];
+    selectedId: Todo["id"];
+    tagContent?: Tag["content"];
+  }) {
+    const listId = this.kanban.findIndex((list) => list.title === category);
+    const targetList = this.kanban.find((list) => list.title === category);
+
+    const todo = targetList?.list.find((todo) => todo.id === selectedId);
+    const todoIndex = targetList?.list.findIndex(
+      (todo) => todo.id === selectedId
+    );
+
+    todo?.tags?.push({
+      id: uuidv4(),
+      content: tagContent ?? "태그",
+    });
+
+    if (todoIndex && todo) {
+      this.kanban[listId].list.splice(todoIndex, 1, todo);
+    }
+
+    this.mount();
+  }
+  removeTag({
+    category,
+    selectedTagId,
+    selectedTodoId,
+  }: {
+    category?: Todo["category"];
+    selectedTagId: Tag["id"];
+    selectedTodoId?: Todo["id"];
+  }) {
+    const listId = this.kanban.findIndex((list) => list.title === category);
+    const targetList = this.kanban.find((list) => list.title === category);
+
+    if (targetList) {
+      const todo = targetList.list.find((todo) => todo.id === selectedTodoId);
+      const todoIndex = targetList.list.findIndex(
+        (todo) => todo.id === selectedTodoId
+      );
+      const newTags = todo?.tags?.filter((tag) => tag.id !== selectedTagId);
+
+      // ✅ newTags가 undefined일 경우 대비
+      this.kanban[listId].list[todoIndex].tags = newTags ?? [];
+
+      this.mount();
+    }
+  }
+
+  mount() {
+    this.render();
+    this.attachEvent(); // ⭐️ 이벤트 다시 연결
+  }
   generateList({ id, title, list }: TodoList) {
     const $list = document.createElement("section");
     $list.classList.add("board");
@@ -244,9 +275,15 @@ class KanbanApp {
     const addButtonElement = addListButtonTemplate(title);
 
     const listHTML = list
-      ?.map(({ id: todoId, content, tags }) => {
-        return listTemplate({ title, todoId, content, tags });
-      })
+      ?.map(
+        ({
+          id: todoId,
+          content,
+          tags,
+        }: Pick<Todo, "id" | "content" | "tags">) => {
+          return listContainerTemplate({ title, todoId, content, tags });
+        }
+      )
       .join("");
 
     const $item = `

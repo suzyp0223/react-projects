@@ -1,7 +1,7 @@
-import tagTemplate from "./tagTemplate";
 import { Todo } from "../type";
+import tagTemplate from "./tagTemplate";
 
-const listTemplate = ({
+export function listContainerTemplate({
   todoId,
   title,
   content,
@@ -11,7 +11,7 @@ const listTemplate = ({
   title: Todo["content"]["title"];
   content: Todo["content"];
   tags: Todo["tags"];
-}) => {
+}) {
   return `
   <section class="todo" id="${title}+${todoId}">
     <div class="todo-item">
@@ -35,6 +35,4 @@ const listTemplate = ({
     </div>
   </section>
   `;
-};
-
-export default listTemplate;
+}

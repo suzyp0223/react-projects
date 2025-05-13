@@ -1,12 +1,12 @@
-import { Todo } from "../type";
+import { Tag, Todo } from "../type";
 
-const tagTemplate = (tags: Todo["tags"], todoId: string) => {
+export default function tagTemplate(tags: Todo["tags"], todoId: Todo["id"]) {
   return `
   <div class="tags">
   ${
     tags &&
     tags
-      .map(({ id, content }) => {
+      .map(({ id, content }: Tag) => {
         return `
         <span class="tag" id="tag-${todoId}">
           ${content}
@@ -23,6 +23,4 @@ const tagTemplate = (tags: Todo["tags"], todoId: string) => {
 
 </div>
   `;
-};
-
-export default tagTemplate;
+}
