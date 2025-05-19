@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["opend"]
+  "cSpell.words": [
+    "opend"
+  ],
+  "git.ignoreLimitWarning": true
 }
