@@ -15,7 +15,7 @@ module.exports = {
   mode: 'development',
   devServer: {
     host: 'localhost',
-    port: 8000,
+    port: 8080,
     open: true,
     watchFiles: ['src/**/*', 'index.html'],
   },
