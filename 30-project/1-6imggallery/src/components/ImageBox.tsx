@@ -4,7 +4,7 @@ const ImageBox = (props: {
 
   return (
     <div className="img-box">
-      <img src={props.src} />
+      <img src={props.src} className="img" />
     </div>
   )
 };

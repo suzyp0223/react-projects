@@ -26,7 +26,6 @@
 
 .row {
   flex-direction: row;
-  gap: 34px;
   overflow-x: scroll;
   width: 100%;
   justify-content: flex-start;
@@ -44,12 +43,15 @@
 .img-box {
   width: 200px;
   height: 200px;
-  min-width: 200px;
-  min-height: 200px;
+  min-width: 150px;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .img-box img {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 input {
@@ -61,8 +63,7 @@ input {
     gap: 40px;
   }
 
-.row {
-  padding: 0 40px;
-}
-
+  .row {
+    padding: 0 40px;
+  }
 }
