@@ -39,6 +39,7 @@ const UserGrid = () => {
       setCurrentPage(1); // ✅ 기본 페이지 설정
       return;
     }
+
     // setCurrentPage(parseInt(searchParams.get("page")));
     setCurrentPage(parseInt(page));
   }, [searchParams]);
