@@ -1,9 +1,9 @@
 import { CircularProgress, Grid } from "@mui/material";
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import useGithubUsersStore from "./../../store/githubUsers";
 import Pagination from "@mui/material/Pagination";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import UserItem from "../UserItem/UserItem";
+import useGithubUsersStore from "./../../store/githubUsers";
 
 const UserGrid = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -56,17 +56,28 @@ const UserGrid = () => {
       <>
         <Grid
           container
-          spacing={{ xs: 2, sm: 3, md: 4 }}
-          columns={{ xs: 2, sm: 3, md: 4 }}
-          style={{ padding: "10px" }}
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "repeat(2, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(4, 1fr)",
+            },
+            gap: {
+              xs: 2,
+              sm: 3,
+              md: 4,
+            },
+            padding: "10px",
+          }}
         >
           {users.map((user) => (
-            <Grid item xs={1} sm={1} md={1} key={user.id}>
+            <Grid key={user.id} sx={{ gridColumn: "span 1" }}>
               <UserItem user={user} />
-              CircularProgress
             </Grid>
           ))}
         </Grid>
+
         {totalCount === 0 ? null : (
           <Pagination
             sx={{ margin: "auto", marginTop: "16px" }}

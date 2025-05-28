@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // 상대경로 기준
+    "paths": {
+      "@components/*": ["src/components/*"]
+    }
+  },
+  "include": ["src"]
+}
