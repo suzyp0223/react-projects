@@ -1,6 +1,7 @@
-import { Button, CircularProgress, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useGithubReposStore } from "../../store/githubRepos";
 import RepoItem from "../RepoItem/RepoItem";
 
