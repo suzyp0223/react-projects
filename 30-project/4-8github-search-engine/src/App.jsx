@@ -2,6 +2,7 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Main from "./pages/Main/Main";
+import User from "./pages/User/User";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Main />}></Route>
-          {/* <Route path="/user/:username" element={<User />}></Route> */}
+          <Route path="/user/:username" element={<User />}></Route>
           <Route path="*" element={<Navigate to="/" />}></Route>
         </Routes>
       </div>

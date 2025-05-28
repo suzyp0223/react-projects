@@ -1,14 +1,14 @@
-import React from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+
+import InfoIcon from "@mui/icons-material/Info";
 import {
-  Card,
-  CardContent,
-  CardActions,
   Avatar,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   Typography,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
 
 const UserItem = ({ user: { login, avatar_url } }) => {
   const [searchParams] = useSearchParams({});
