@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
 dist-ssr
 *.local
 
@@ -23,5 +22,7 @@ dist-ssr
 *.sln
 *.sw?
 *.envreact-projects-clean/
+
+# dist
 # 30-project/4-8github-search-engine/.env
-# .env.env
+# .env
