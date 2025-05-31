@@ -1,5 +1,8 @@
+// src/App.tsx
 import { useState } from "react";
+
 import "./App.css";
+
 import KakaoMap from "./components/KakaoMap";
 import MarkerList from "./components/MarkerList";
 
@@ -19,7 +22,7 @@ function App() {
         <h1>카카오맵 테스트</h1>
       </header>
 
-      <main style={{ marginTop: "100px" }}>
+      <main>
         <KakaoMap markerList={markerList} setMarkerList={setMarkerList} />
         <MarkerList markerList={markerList} />
       </main>
